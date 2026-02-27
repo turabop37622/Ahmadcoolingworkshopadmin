@@ -5,734 +5,239 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel — Ahmed Cooling & Appliances</title>
   <style>
-    /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     :root {
-      --bg:        #0D1117;
-      --surface:   #161B22;
-      --surface2:  #21262D;
-      --border:    #30363D;
-      --primary:   #2563EB;
-      --primary-h: #1D4ED8;
-      --success:   #10B981;
-      --danger:    #EF4444;
-      --warning:   #F59E0B;
-      --text:      #E6EDF3;
-      --text2:     #8B949E;
-      --text3:     #6E7681;
-      --radius:    14px;
-      --shadow:    0 8px 32px rgba(0,0,0,0.4);
+      --bg:       #0D1117;
+      --surface:  #161B22;
+      --surface2: #21262D;
+      --border:   #30363D;
+      --primary:  #2563EB;
+      --primary-h:#1D4ED8;
+      --success:  #10B981;
+      --danger:   #EF4444;
+      --warning:  #F59E0B;
+      --text:     #E6EDF3;
+      --text2:    #8B949E;
+      --text3:    #6E7681;
+      --radius:   14px;
+      --shadow:   0 8px 32px rgba(0,0,0,0.4);
     }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      min-height: 100vh;
-    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
 
-    /* ── LOGIN PAGE ── */
-    .login-page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* ══ LOGIN ══ */
+    .login-page { min-height:100vh; display:flex; align-items:center; justify-content:center;
       background: radial-gradient(ellipse at 20% 50%, rgba(37,99,235,0.15) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(16,185,129,0.08) 0%, transparent 50%),
-                  var(--bg);
-    }
+                  radial-gradient(ellipse at 80% 20%, rgba(16,185,129,0.08) 0%, transparent 50%), var(--bg); }
+    .login-box { width:100%; max-width:420px; padding:48px 40px; background:var(--surface); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); }
+    .login-logo { text-align:center; margin-bottom:32px; }
+    .login-logo .logo-icon { font-size:48px; display:block; margin-bottom:12px; }
+    .login-logo h1 { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
+    .login-logo p  { font-size:13px; color:var(--text2); margin-top:4px; }
+    .login-badge { display:inline-block; background:rgba(37,99,235,0.15); color:#60A5FA; border:1px solid rgba(37,99,235,0.3); padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:12px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+    .form-group input { width:100%; padding:13px 16px; background:var(--surface2); border:1.5px solid var(--border); border-radius:12px; color:var(--text); font-size:15px; outline:none; transition:border-color 0.2s; }
+    .form-group input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
+    .btn-login { width:100%; padding:15px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; margin-top:8px; transition:all 0.2s; }
+    .btn-login:hover { background:var(--primary-h); }
+    .login-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#FCA5A5; padding:12px 16px; border-radius:10px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
 
-    .login-box {
-      width: 100%;
-      max-width: 420px;
-      padding: 48px 40px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-    }
+    /* ══ LAYOUT ══ */
+    .dashboard { display:none; }
+    .layout    { display:flex; min-height:100vh; }
 
-    .login-logo {
-      text-align: center;
-      margin-bottom: 32px;
-    }
+    /* ══ SIDEBAR ══ */
+    .sidebar { width:260px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:100; }
+    .sidebar-header { padding:24px 20px; border-bottom:1px solid var(--border); }
+    .sidebar-logo { font-size:20px; font-weight:900; letter-spacing:-0.5px; }
+    .sidebar-logo span { color:#60A5FA; }
+    .sidebar-subtitle { font-size:11px; color:var(--text3); margin-top:4px; font-weight:600; }
+    .sidebar-nav { padding:16px 12px; flex:1; overflow-y:auto; }
+    .nav-section { font-size:10px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:1px; padding:0 14px; margin:16px 0 6px; }
+    .nav-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text2); transition:all 0.2s; margin-bottom:4px; border:none; background:none; width:100%; text-align:left; }
+    .nav-item:hover  { background:var(--surface2); color:var(--text); }
+    .nav-item.active { background:rgba(37,99,235,0.15); color:#60A5FA; }
+    .nav-icon  { font-size:18px; width:24px; text-align:center; }
+    .nav-badge { margin-left:auto; background:var(--danger); color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:10px; min-width:20px; text-align:center; }
+    .nav-badge.green { background:var(--success); }
+    .nav-badge.blue  { background:var(--primary); }
+    .sidebar-footer { padding:16px 12px; border-top:1px solid var(--border); }
+    .admin-info { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border-radius:12px; margin-bottom:10px; }
+    .admin-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#7C3AED); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; color:#fff; flex-shrink:0; }
+    .admin-name { font-size:13px; font-weight:700; }
+    .admin-role { font-size:11px; color:var(--text3); font-weight:600; }
+    .btn-logout { width:100%; padding:10px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#FCA5A5; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .btn-logout:hover { background:rgba(239,68,68,0.2); }
 
-    .login-logo .logo-icon {
-      font-size: 48px;
-      display: block;
-      margin-bottom: 12px;
-    }
+    /* ══ MAIN ══ */
+    .main { margin-left:260px; flex:1; padding:32px; min-height:100vh; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+    .page-title { font-size:26px; font-weight:900; letter-spacing:-0.5px; }
+    .page-sub   { font-size:13px; color:var(--text2); margin-top:4px; font-weight:500; }
+    .topbar-actions { display:flex; gap:10px; align-items:center; }
+    .btn-refresh { padding:10px 18px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .btn-refresh:hover { background:var(--border); }
 
-    .login-logo h1 {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -0.5px;
-    }
+    /* ══ STATS ══ */
+    .stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:28px; }
+    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; position:relative; overflow:hidden; }
+    .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .stat-card.pending::before  { background:var(--warning); }
+    .stat-card.active::before   { background:var(--success); }
+    .stat-card.rejected::before { background:var(--danger);  }
+    .stat-card.total::before    { background:var(--primary); }
+    .stat-card.users::before    { background:#8B5CF6; }
+    .stat-icon  { font-size:26px; margin-bottom:10px; }
+    .stat-num   { font-size:30px; font-weight:900; letter-spacing:-1px; }
+    .stat-label { font-size:11px; color:var(--text2); font-weight:600; margin-top:4px; text-transform:uppercase; letter-spacing:0.5px; }
 
-    .login-logo p {
-      font-size: 13px;
-      color: var(--text2);
-      margin-top: 4px;
-    }
+    /* ══ FILTER BAR ══ */
+    .filter-bar { display:flex; gap:10px; margin-bottom:20px; align-items:center; flex-wrap:wrap; }
+    .search-input-wrap { flex:1; position:relative; min-width:200px; }
+    .search-input-wrap input { width:100%; padding:10px 16px 10px 40px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; outline:none; transition:border-color 0.2s; }
+    .search-input-wrap input:focus { border-color:var(--primary); }
+    .search-input-wrap .si { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; }
+    .filter-select { padding:10px 16px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:13px; font-weight:700; outline:none; cursor:pointer; }
 
-    .login-badge {
-      display: inline-block;
-      background: rgba(37,99,235,0.15);
-      color: #60A5FA;
-      border: 1px solid rgba(37,99,235,0.3);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
+    /* ══ TABLE ══ */
+    .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; overflow-x:auto; }
+    .data-table { width:100%; border-collapse:collapse; min-width:800px; }
+    .data-table th { padding:14px 16px; text-align:left; font-size:11px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; background:var(--surface2); border-bottom:1px solid var(--border); white-space:nowrap; }
+    .data-table td { padding:14px 16px; border-bottom:1px solid var(--border); font-size:13px; vertical-align:middle; }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tr:hover td { background:rgba(255,255,255,0.02); }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+    /* ══ CELLS ══ */
+    .ad-info-cell  { display:flex; align-items:center; gap:12px; }
+    .ad-emoji-box  { width:42px; height:42px; border-radius:10px; background:var(--surface2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .cell-title    { font-weight:700; color:var(--text); font-size:13px; }
+    .cell-sub      { font-size:11px; color:var(--text2); margin-top:2px; }
+    .price-cell    { font-weight:800; color:#60A5FA; font-size:14px; }
 
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text2);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 13px 16px;
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
-    }
-
-    .btn-login {
-      width: 100%;
-      padding: 15px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .btn-login:hover { background: var(--primary-h); }
-    .btn-login:active { transform: scale(0.98); }
-
-    .login-error {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.3);
-      color: #FCA5A5;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      display: none;
-    }
-
-    /* ── DASHBOARD ── */
-    .dashboard { display: none; }
-
-    /* Sidebar */
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 260px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
-      z-index: 100;
-    }
-
-    .sidebar-header {
-      padding: 24px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-logo {
-      font-size: 20px;
-      font-weight: 900;
-      color: var(--text);
-      letter-spacing: -0.5px;
-    }
-
-    .sidebar-logo span { color: #60A5FA; }
-
-    .sidebar-subtitle {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .sidebar-nav {
-      padding: 16px 12px;
-      flex: 1;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text2);
-      transition: all 0.2s;
-      margin-bottom: 4px;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-    }
-
-    .nav-item:hover { background: var(--surface2); color: var(--text); }
-    .nav-item.active { background: rgba(37,99,235,0.15); color: #60A5FA; }
-
-    .nav-icon { font-size: 18px; width: 24px; text-align: center; }
-
-    .nav-badge {
-      margin-left: auto;
-      background: var(--danger);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 10px;
-      min-width: 20px;
-      text-align: center;
-    }
-
-    .nav-badge.green { background: var(--success); }
-
-    .sidebar-footer {
-      padding: 16px 12px;
-      border-top: 1px solid var(--border);
-    }
-
-    .admin-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      background: var(--surface2);
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-
-    .admin-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #2563EB, #7C3AED);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 800; color: #fff;
-      flex-shrink: 0;
-    }
-
-    .admin-name { font-size: 13px; font-weight: 700; color: var(--text); }
-    .admin-role { font-size: 11px; color: var(--text3); font-weight: 600; }
-
-    .btn-logout {
-      width: 100%;
-      padding: 10px;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.2);
-      color: #FCA5A5;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-logout:hover { background: rgba(239,68,68,0.2); }
-
-    /* Main content */
-    .main {
-      margin-left: 260px;
-      flex: 1;
-      padding: 32px;
-      min-height: 100vh;
-    }
-
-    /* Top bar */
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-
-    .page-title {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-    }
-
-    .page-sub {
-      font-size: 13px;
-      color: var(--text2);
-      margin-top: 4px;
-      font-weight: 500;
-    }
-
-    .topbar-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .btn-refresh {
-      padding: 10px 18px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-refresh:hover { background: var(--border); }
-
-    /* Stats cards */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-
-    .stat-card.pending::before  { background: var(--warning); }
-    .stat-card.active::before   { background: var(--success); }
-    .stat-card.rejected::before { background: var(--danger); }
-    .stat-card.total::before    { background: var(--primary); }
-
-    .stat-icon { font-size: 28px; margin-bottom: 12px; }
-    .stat-num  { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
-    .stat-label { font-size: 12px; color: var(--text2); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-    /* Filter bar */
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .filter-tabs {
-      display: flex;
-      gap: 6px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 4px;
-    }
-
-    .filter-tab {
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: none;
-      background: none;
-      color: var(--text2);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .filter-tab.active {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .search-input-wrap {
-      flex: 1;
-      position: relative;
-    }
-
-    .search-input-wrap input {
-      width: 100%;
-      padding: 10px 16px 10px 40px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-input-wrap input:focus { border-color: var(--primary); }
-    .search-input-wrap .si { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; }
-
-    /* Ads table */
-    .ads-table-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .ads-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .ads-table th {
-      padding: 14px 18px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--text3);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      background: var(--surface2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .ads-table td {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
-      vertical-align: middle;
-    }
-
-    .ads-table tr:last-child td { border-bottom: none; }
-
-    .ads-table tr:hover td { background: rgba(255,255,255,0.02); }
+    /* Seller cell */
+    .seller-cell   { display:flex; align-items:center; gap:9px; }
+    .seller-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#7C3AED); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#fff; flex-shrink:0; }
+    .seller-avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
+    .seller-name   { font-size:12px; font-weight:700; color:var(--text); }
+    .seller-phone  { font-size:11px; color:var(--text2); margin-top:1px; }
 
     /* Status badge */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-    }
-
-    .status-badge.pending  { background: rgba(245,158,11,0.15);  color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); }
-    .status-badge.active   { background: rgba(16,185,129,0.15);  color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
-    .status-badge.rejected { background: rgba(239,68,68,0.15);   color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
-    .status-badge.expired  { background: rgba(107,114,128,0.15); color: #9CA3AF; border: 1px solid rgba(107,114,128,0.3); }
-
-    /* Ad info cell */
-    .ad-info-cell { display: flex; align-items: center; gap: 14px; }
-    .ad-emoji-box {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface2); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
-    .ad-title-cell { font-weight: 700; color: var(--text); font-size: 14px; }
-    .ad-sub-cell   { font-size: 12px; color: var(--text2); margin-top: 2px; }
-
-    .price-cell { font-weight: 800; color: #60A5FA; font-size: 15px; }
+    .status-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:800; white-space:nowrap; }
+    .status-badge.pending  { background:rgba(245,158,11,0.15);  color:#FCD34D; border:1px solid rgba(245,158,11,0.3); }
+    .status-badge.active   { background:rgba(16,185,129,0.15);  color:#6EE7B7; border:1px solid rgba(16,185,129,0.3); }
+    .status-badge.rejected { background:rgba(239,68,68,0.15);   color:#FCA5A5; border:1px solid rgba(239,68,68,0.3); }
+    .status-badge.expired  { background:rgba(107,114,128,0.15); color:#9CA3AF; border:1px solid rgba(107,114,128,0.3); }
 
     /* Action buttons */
-    .action-btns { display: flex; gap: 8px; }
+    .action-btns { display:flex; gap:6px; flex-wrap:wrap; }
+    .btn-approve { padding:7px 13px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#6EE7B7; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .btn-approve:hover { background:rgba(16,185,129,0.3); }
+    .btn-reject  { padding:7px 13px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#FCA5A5; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .btn-reject:hover { background:rgba(239,68,68,0.2); }
+    .btn-view    { padding:7px 10px; background:var(--surface2); border:1px solid var(--border); color:var(--text2); border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .btn-view:hover { color:var(--text); border-color:var(--text3); }
+    .btn-user-ads { padding:7px 13px; background:rgba(37,99,235,0.15); border:1px solid rgba(37,99,235,0.3); color:#60A5FA; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .btn-user-ads:hover { background:rgba(37,99,235,0.3); }
 
-    .btn-approve {
-      padding: 8px 16px;
-      background: rgba(16,185,129,0.15);
-      border: 1px solid rgba(16,185,129,0.3);
-      color: #6EE7B7;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .btn-approve:hover { background: rgba(16,185,129,0.3); }
+    /* User stats pills */
+    .user-stats { display:flex; gap:6px; flex-wrap:wrap; }
+    .user-stat-pill { padding:3px 8px; border-radius:6px; font-size:10px; font-weight:800; }
+    .pill-active   { background:rgba(16,185,129,0.15); color:#6EE7B7; }
+    .pill-pending  { background:rgba(245,158,11,0.15); color:#FCD34D; }
+    .pill-rejected { background:rgba(239,68,68,0.12); color:#FCA5A5; }
 
-    .btn-reject {
-      padding: 8px 16px;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.25);
-      color: #FCA5A5;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .btn-reject:hover { background: rgba(239,68,68,0.2); }
+    /* Empty / Loading */
+    .empty-state  { text-align:center; padding:70px 20px; }
+    .empty-icon   { font-size:52px; margin-bottom:14px; }
+    .empty-title  { font-size:18px; font-weight:800; margin-bottom:8px; }
+    .empty-desc   { font-size:13px; color:var(--text2); }
+    .loading-state { text-align:center; padding:60px; color:var(--text2); }
+    .spinner { width:38px; height:38px; border:3px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
-    .btn-view {
-      padding: 8px 12px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text2);
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-view:hover { color: var(--text); border-color: var(--text3); }
+    /* ══ MODAL ══ */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:30px; width:100%; max-width:520px; box-shadow:var(--shadow); animation:modalIn 0.25s ease; max-height:90vh; overflow-y:auto; }
+    @keyframes modalIn { from { transform:scale(0.92) translateY(20px); opacity:0; } to { transform:scale(1) translateY(0); opacity:1; } }
+    .modal-title { font-size:19px; font-weight:900; margin-bottom:6px; letter-spacing:-0.3px; }
+    .modal-sub   { font-size:13px; color:var(--text2); margin-bottom:22px; }
+    .modal-field { margin-bottom:14px; }
+    .modal-field label { display:block; font-size:11px; font-weight:800; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:7px; }
+    .modal-field textarea, .modal-field select { width:100%; padding:11px 14px; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; outline:none; resize:vertical; transition:border-color 0.2s; }
+    .modal-field textarea:focus, .modal-field select:focus { border-color:var(--danger); }
+    .modal-btns { display:flex; gap:10px; margin-top:22px; }
+    .btn-modal-confirm { flex:1; padding:13px; background:var(--danger); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:800; cursor:pointer; }
+    .btn-modal-confirm:hover { opacity:0.9; }
+    .btn-modal-cancel  { flex:1; padding:13px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; }
+    .btn-modal-cancel:hover { background:var(--border); }
 
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 80px 20px;
-    }
-    .empty-icon { font-size: 56px; margin-bottom: 16px; }
-    .empty-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-    .empty-desc { font-size: 14px; color: var(--text2); }
+    /* Detail grid */
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .detail-item { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; }
+    .detail-label { font-size:10px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+    .detail-value { font-size:13px; font-weight:700; }
+    .detail-desc  { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:13px; margin-bottom:16px; font-size:13px; color:var(--text2); line-height:1.6; white-space:pre-wrap; }
 
-    /* Loading */
-    .loading-state {
-      text-align: center;
-      padding: 60px;
-      color: var(--text2);
-    }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* User detail modal */
+    .user-profile-banner { background:linear-gradient(135deg,rgba(37,99,235,0.2),rgba(124,58,237,0.15)); border:1px solid var(--border); border-radius:14px; padding:20px; display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+    .user-big-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#7C3AED); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:900; color:#fff; flex-shrink:0; }
+    .user-big-avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
+    .user-profile-name  { font-size:18px; font-weight:900; }
+    .user-profile-email { font-size:12px; color:var(--text2); margin-top:3px; }
+    .user-profile-phone { font-size:12px; color:#60A5FA; margin-top:2px; font-weight:700; }
 
-    /* ── MODAL ── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: var(--shadow);
-      animation: modalIn 0.25s ease;
-    }
-
-    @keyframes modalIn {
-      from { transform: scale(0.92) translateY(20px); opacity: 0; }
-      to   { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .modal-title {
-      font-size: 20px;
-      font-weight: 900;
-      margin-bottom: 8px;
-      letter-spacing: -0.3px;
-    }
-
-    .modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
-
-    .modal-field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--text2);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .modal-field textarea, .modal-field select {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 14px;
-      outline: none;
-      resize: vertical;
-      transition: border-color 0.2s;
-    }
-    .modal-field textarea:focus, .modal-field select:focus { border-color: var(--danger); }
-
-    .modal-btns {
-      display: flex;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
-    .btn-modal-confirm {
-      flex: 1;
-      padding: 13px;
-      background: var(--danger);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .btn-modal-confirm:hover { opacity: 0.9; }
-
-    .btn-modal-cancel {
-      flex: 1;
-      padding: 13px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn-modal-cancel:hover { background: var(--border); }
-
-    /* Detail modal */
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .detail-item {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
-    }
-
-    .detail-item-label { font-size: 10px; font-weight: 800; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .detail-item-value { font-size: 14px; font-weight: 700; color: var(--text); }
-
-    .detail-desc {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 20px;
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.6;
-    }
+    .user-ads-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .user-ad-card { background:var(--surface2); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:pointer; transition:border-color 0.2s; }
+    .user-ad-card:hover { border-color:var(--primary); }
+    .user-ad-img { width:100%; height:90px; object-fit:cover; background:var(--surface); display:flex; align-items:center; justify-content:center; font-size:32px; }
+    .user-ad-info { padding:10px; }
+    .user-ad-price { font-size:13px; font-weight:900; color:#60A5FA; }
+    .user-ad-name  { font-size:11px; font-weight:700; color:var(--text); margin-top:2px; }
+    .user-ad-status{ font-size:10px; margin-top:4px; }
 
     /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      padding: 14px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      transform: translateY(80px);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { background: #064E3B; border: 1px solid #065F46; color: #6EE7B7; }
-    .toast.error   { background: #7F1D1D; border: 1px solid #991B1B; color: #FCA5A5; }
+    .toast { position:fixed; bottom:28px; right:28px; padding:13px 20px; border-radius:12px; font-size:14px; font-weight:700; z-index:9999; display:flex; align-items:center; gap:10px; box-shadow:0 8px 32px rgba(0,0,0,0.4); transform:translateY(80px); opacity:0; transition:all 0.3s ease; }
+    .toast.show    { transform:translateY(0); opacity:1; }
+    .toast.success { background:#064E3B; border:1px solid #065F46; color:#6EE7B7; }
+    .toast.error   { background:#7F1D1D; border:1px solid #991B1B; color:#FCA5A5; }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .sidebar { width: 200px; }
-      .main { margin-left: 200px; padding: 20px; }
+    @media (max-width:1000px) {
+      .stats-grid { grid-template-columns:repeat(3,1fr); }
+      .sidebar { width:210px; }
+      .main { margin-left:210px; padding:20px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════
-     LOGIN PAGE
-══════════════════════════════════════════════ -->
+<!-- ══ LOGIN ══ -->
 <div class="login-page" id="loginPage">
   <div class="login-box">
     <div class="login-logo">
       <span class="login-badge">Admin Access</span>
       <span class="logo-icon">❄️</span>
       <h1>Ahmed Cooling & Appliances</h1>
-      <p>Sign in to manage ads and listings</p>
+      <p>Sign in to manage ads and users</p>
     </div>
-
     <div class="login-error" id="loginError">⚠️ Invalid email or password</div>
-
     <div class="form-group">
       <label>Email Address</label>
-      <input type="email" id="emailInput" placeholder="admin@ahmedcooling.com" />
+      <input type="email" id="emailInput" placeholder="admin@ahmedcooling.com"
+        onkeydown="if(event.key==='Enter') document.getElementById('passwordInput').focus()" />
     </div>
-
     <div class="form-group">
       <label>Password</label>
-      <input type="password" id="passwordInput" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
+      <input type="password" id="passwordInput" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter') doLogin()" />
     </div>
-
     <button class="btn-login" onclick="doLogin()">🔐  Sign In to Dashboard</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     DASHBOARD
-══════════════════════════════════════════════ -->
+<!-- ══ DASHBOARD ══ -->
 <div class="dashboard" id="dashboard">
   <div class="layout">
 
@@ -742,26 +247,15 @@
         <div class="sidebar-logo">Ahmed <span>Admin</span></div>
         <div class="sidebar-subtitle">Cooling & Appliances Panel</div>
       </div>
-
       <nav class="sidebar-nav">
-        <button class="nav-item active" onclick="showTab('pending')">
-          <span class="nav-icon">⏳</span> Pending Ads
-          <span class="nav-badge" id="pendingCount">0</span>
-        </button>
-        <button class="nav-item" onclick="showTab('active')">
-          <span class="nav-icon">✅</span> Active Ads
-          <span class="nav-badge green" id="activeCount">0</span>
-        </button>
-        <button class="nav-item" onclick="showTab('rejected')">
-          <span class="nav-icon">❌</span> Rejected Ads
-          <span class="nav-badge" id="rejectedCount">0</span>
-        </button>
-        <button class="nav-item" onclick="showTab('all')">
-          <span class="nav-icon">📋</span> All Ads
-          <span class="nav-badge" id="allCount">0</span>
-        </button>
+        <div class="nav-section">Ads Management</div>
+        <button class="nav-item active" onclick="switchTab('pending',   this)"><span class="nav-icon">⏳</span> Pending Ads   <span class="nav-badge"        id="nb-pending">0</span></button>
+        <button class="nav-item"        onclick="switchTab('active',    this)"><span class="nav-icon">✅</span> Active Ads    <span class="nav-badge green"   id="nb-active">0</span></button>
+        <button class="nav-item"        onclick="switchTab('rejected',  this)"><span class="nav-icon">❌</span> Rejected Ads  <span class="nav-badge"        id="nb-rejected">0</span></button>
+        <button class="nav-item"        onclick="switchTab('all',       this)"><span class="nav-icon">📋</span> All Ads       <span class="nav-badge blue"    id="nb-all">0</span></button>
+        <div class="nav-section">User Management</div>
+        <button class="nav-item"        onclick="switchTab('users',     this)"><span class="nav-icon">👥</span> All Users     <span class="nav-badge blue"    id="nb-users">0</span></button>
       </nav>
-
       <div class="sidebar-footer">
         <div class="admin-info">
           <div class="admin-avatar" id="adminAvatar">A</div>
@@ -776,616 +270,565 @@
 
     <!-- Main -->
     <main class="main">
-      <!-- Topbar -->
       <div class="topbar">
         <div>
           <div class="page-title" id="pageTitle">⏳ Pending Ads</div>
-          <div class="page-sub" id="pageSub">Review and approve or reject user submitted ads</div>
+          <div class="page-sub"   id="pageSub">Review and approve or reject user submitted ads</div>
         </div>
         <div class="topbar-actions">
-          <button class="btn-refresh" onclick="loadAds()">↻ Refresh</button>
+          <button class="btn-refresh" onclick="reloadCurrent()">↻ Refresh</button>
         </div>
       </div>
 
       <!-- Stats -->
       <div class="stats-grid">
-        <div class="stat-card pending">
-          <div class="stat-icon">⏳</div>
-          <div class="stat-num" id="statPending">0</div>
-          <div class="stat-label">Pending Review</div>
-        </div>
-        <div class="stat-card active">
-          <div class="stat-icon">✅</div>
-          <div class="stat-num" id="statActive">0</div>
-          <div class="stat-label">Active Ads</div>
-        </div>
-        <div class="stat-card rejected">
-          <div class="stat-icon">❌</div>
-          <div class="stat-num" id="statRejected">0</div>
-          <div class="stat-label">Rejected</div>
-        </div>
-        <div class="stat-card total">
-          <div class="stat-icon">📊</div>
-          <div class="stat-num" id="statTotal">0</div>
-          <div class="stat-label">Total Ads</div>
-        </div>
+        <div class="stat-card pending"><div class="stat-icon">⏳</div><div class="stat-num" id="st-pending">0</div><div class="stat-label">Pending</div></div>
+        <div class="stat-card active" ><div class="stat-icon">✅</div><div class="stat-num" id="st-active">0</div><div class="stat-label">Active</div></div>
+        <div class="stat-card rejected"><div class="stat-icon">❌</div><div class="stat-num" id="st-rejected">0</div><div class="stat-label">Rejected</div></div>
+        <div class="stat-card total"  ><div class="stat-icon">📊</div><div class="stat-num" id="st-total">0</div><div class="stat-label">Total Ads</div></div>
+        <div class="stat-card users"  ><div class="stat-icon">👥</div><div class="stat-num" id="st-users">0</div><div class="stat-label">Users</div></div>
       </div>
 
-      <!-- Filter bar -->
-      <div class="filter-bar">
+      <!-- Filter -->
+      <div class="filter-bar" id="filterBar">
         <div class="search-input-wrap">
           <span class="si">🔍</span>
-          <input type="text" placeholder="Search by brand, model, location..." id="searchInput" oninput="filterAds()" />
+          <input type="text" id="searchInput" placeholder="Search..." oninput="renderTable()" />
         </div>
-        <select id="categoryFilter" onchange="filterAds()"
-          style="padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;font-weight:700;outline:none;cursor:pointer;">
+        <select class="filter-select" id="catFilter" onchange="renderTable()">
           <option value="">All Categories</option>
           <option value="ac">❄️ AC</option>
           <option value="led">📺 LED / TV</option>
           <option value="fridge">🧊 Fridge</option>
           <option value="washing">🧺 Washing</option>
         </select>
+        <select class="filter-select" id="statusFilter" onchange="renderTable()" style="display:none;">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
+        </select>
       </div>
 
-      <!-- Ads Table -->
-      <div class="ads-table-wrap">
-        <div id="tableContent">
-          <div class="loading-state">
-            <div class="spinner"></div>
-            <div>Loading ads...</div>
-          </div>
-        </div>
+      <!-- Table -->
+      <div class="table-wrap">
+        <div id="tableContent"><div class="loading-state"><div class="spinner"></div><div>Loading...</div></div></div>
       </div>
     </main>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     REJECT MODAL
-══════════════════════════════════════════════ -->
+<!-- ══ REJECT MODAL ══ -->
 <div class="modal-overlay" id="rejectModal">
   <div class="modal">
     <div class="modal-title">❌ Reject Ad</div>
-    <div class="modal-sub" id="rejectModalSub">Provide a reason for rejection</div>
-
-    <div class="modal-field" style="margin-bottom:14px;">
+    <div class="modal-sub" id="rejectSub">Provide a reason</div>
+    <div class="modal-field">
       <label>Quick Reason</label>
-      <select id="rejectQuickReason" onchange="applyQuickReason()">
-        <option value="">— Select a quick reason —</option>
+      <select id="quickReason" onchange="document.getElementById('rejectReason').value=this.value">
+        <option value="">— Select quick reason —</option>
         <option value="Price is unrealistic or misleading.">Unrealistic price</option>
-        <option value="Ad does not meet our content guidelines.">Doesn't meet guidelines</option>
+        <option value="Ad does not meet content guidelines.">Doesn't meet guidelines</option>
         <option value="Duplicate or spam listing.">Duplicate / Spam</option>
-        <option value="Incomplete or incorrect information provided.">Incomplete info</option>
-        <option value="Photos are missing or unclear.">No/unclear photos</option>
+        <option value="Incomplete or incorrect information.">Incomplete info</option>
+        <option value="Photos are missing or unclear.">No / unclear photos</option>
         <option value="Contact information is invalid.">Invalid contact</option>
       </select>
     </div>
-
     <div class="modal-field">
       <label>Rejection Reason *</label>
-      <textarea id="rejectReason" rows="4" placeholder="Write reason for rejection..."></textarea>
+      <textarea id="rejectReason" rows="4" placeholder="Write reason..."></textarea>
     </div>
-
     <div class="modal-btns">
-      <button class="btn-modal-cancel" onclick="closeRejectModal()">Cancel</button>
-      <button class="btn-modal-confirm" onclick="confirmReject()">❌ Reject Ad</button>
+      <button class="btn-modal-cancel" onclick="closeModal('rejectModal')">Cancel</button>
+      <button class="btn-modal-confirm" onclick="confirmReject()">❌ Reject</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     DETAIL MODAL
-══════════════════════════════════════════════ -->
+<!-- ══ AD DETAIL MODAL ══ -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal" style="max-width:580px;">
-    <div class="modal-title" id="detailModalTitle">Ad Details</div>
-    <div class="modal-sub" id="detailModalSub"></div>
-
+    <div class="modal-title" id="detailTitle">Ad Details</div>
+    <div class="modal-sub"   id="detailSub"></div>
     <div class="detail-grid" id="detailGrid"></div>
     <div class="detail-desc" id="detailDesc" style="display:none;"></div>
-
-    <div class="modal-btns" id="detailModalBtns"></div>
+    <div class="modal-btns"  id="detailBtns"></div>
   </div>
 </div>
 
-<!-- Toast -->
+<!-- ══ USER DETAIL MODAL ══ -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-title" id="userModalTitle">User Profile</div>
+    <div class="modal-sub"   id="userModalSub"></div>
+    <div id="userModalBody"></div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="closeModal('userModal')">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<!-- ══════════════════════════════════════════════
-     SCRIPT
-══════════════════════════════════════════════ -->
 <script>
-  // ✅ APNA BACKEND URL YAHAN LAGAO
-  const API_BASE = 'https://ahmed-cooling-backend.onrender.com/api';
+  const API = 'https://ahmed-cooling-backend.onrender.com/api';
 
-  // ✅ ADMIN CREDENTIALS — change karo
-  const ADMIN_CREDENTIALS = [
+  const ADMINS = [
     { email: 'Ahmadcoolingpoint9038@gmail.com', password: 'Ahmadlegand5712', name: 'Ahmed Admin' },
-    // Aur admins add kar sakte ho:
-    // { email: 'manager@ahmedcooling.com', password: 'Manager@5678', name: 'Manager' },
   ];
 
-  // ── State ──
+  const CAT_EMOJI  = { ac:'❄️', led:'📺', fridge:'🧊', washing:'🧺' };
+  const COND_LABEL = { new:'Brand New', like_new:'Like New', good:'Good', fair:'Fair', for_parts:'For Parts' };
+  const TAB_META   = {
+    pending:  ['⏳ Pending Ads',  'Review and approve or reject submissions'],
+    active:   ['✅ Active Ads',   'Currently live — visible to all users'],
+    rejected: ['❌ Rejected Ads', 'Ads rejected with reasons'],
+    all:      ['📋 All Ads',      'Complete list of every ad'],
+    users:    ['👥 All Users',    'Registered users and their activity'],
+  };
+
   let currentTab    = 'pending';
   let allAds        = [];
-  let rejectingAdId = null;
+  let allUsers      = [];
+  let rejectingId   = null;
   let currentAdmin  = null;
 
-  // ════════════════════════════════════════════
-  //  LOGIN
-  // ════════════════════════════════════════════
+  // ════ LOGIN ════
   function doLogin() {
-    const email    = document.getElementById('emailInput').value.trim().toLowerCase();
-    const password = document.getElementById('passwordInput').value;
-    const errEl    = document.getElementById('loginError');
-
-    const admin = ADMIN_CREDENTIALS.find(
-      a => a.email.toLowerCase() === email && a.password === password
-    );
-
+    const email = document.getElementById('emailInput').value.trim().toLowerCase();
+    const pass  = document.getElementById('passwordInput').value;
+    const admin = ADMINS.find(a => a.email.toLowerCase() === email && a.password === pass);
     if (!admin) {
-      errEl.style.display = 'block';
+      document.getElementById('loginError').style.display = 'block';
       document.getElementById('passwordInput').value = '';
       return;
     }
-
-    errEl.style.display = 'none';
     currentAdmin = admin;
-
-    // Update admin info in sidebar
+    document.getElementById('loginError').style.display = 'none';
     document.getElementById('adminName').textContent   = admin.name;
     document.getElementById('adminAvatar').textContent = admin.name.charAt(0).toUpperCase();
-
-    // Show dashboard
     document.getElementById('loginPage').style.display  = 'none';
     document.getElementById('dashboard').style.display  = 'block';
-
-    loadAds();
+    loadAll();
   }
 
   function doLogout() {
     currentAdmin = null;
-    document.getElementById('loginPage').style.display  = 'flex';
-    document.getElementById('dashboard').style.display  = 'none';
-    document.getElementById('emailInput').value    = '';
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('emailInput').value = '';
     document.getElementById('passwordInput').value = '';
   }
 
-  // ════════════════════════════════════════════
-  //  TAB NAVIGATION
-  // ════════════════════════════════════════════
-  function showTab(tab) {
+  // ════ LOAD ALL DATA ════
+  async function loadAll() {
+    showLoading();
+    try {
+      const [adsRes, usersRes] = await Promise.all([
+        fetch(`${API}/ads/admin/all`).then(r => r.json()).catch(() => ({ data: [] })),
+        fetch(`${API}/ads/admin/users`).then(r => r.json()).catch(() => ({ data: [] })),
+      ]);
+      allAds   = (adsRes.data   || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      allUsers = (usersRes.data || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      updateStats();
+      renderTable();
+    } catch (e) {
+      showError('Cannot connect to server. Check API URL and backend status.');
+    }
+  }
+
+  function reloadCurrent() { loadAll(); }
+
+  // ════ STATS ════
+  function updateStats() {
+    const p = allAds.filter(a => a.status === 'pending').length;
+    const a = allAds.filter(a => a.status === 'active').length;
+    const r = allAds.filter(a => a.status === 'rejected').length;
+    const t = allAds.length;
+    const u = allUsers.length;
+
+    document.getElementById('st-pending').textContent  = p;
+    document.getElementById('st-active').textContent   = a;
+    document.getElementById('st-rejected').textContent = r;
+    document.getElementById('st-total').textContent    = t;
+    document.getElementById('st-users').textContent    = u;
+
+    document.getElementById('nb-pending').textContent  = p;
+    document.getElementById('nb-active').textContent   = a;
+    document.getElementById('nb-rejected').textContent = r;
+    document.getElementById('nb-all').textContent      = t;
+    document.getElementById('nb-users').textContent    = u;
+  }
+
+  // ════ TAB SWITCH ════
+  function switchTab(tab, el) {
     currentTab = tab;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+    const [title, sub] = TAB_META[tab] || ['', ''];
+    document.getElementById('pageTitle').textContent = title;
+    document.getElementById('pageSub').textContent   = sub;
 
-    // Update nav
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-
-    // Update title
-    const titles = {
-      pending:  ['⏳ Pending Ads',  'Review and approve or reject user submitted ads'],
-      active:   ['✅ Active Ads',   'Currently live ads visible to all users'],
-      rejected: ['❌ Rejected Ads', 'Ads that were rejected with reasons'],
-      all:      ['📋 All Ads',      'Complete list of all ads in the system'],
-    };
-    document.getElementById('pageTitle').textContent = titles[tab][0];
-    document.getElementById('pageSub').textContent   = titles[tab][1];
+    // Show/hide category filter
+    document.getElementById('catFilter').style.display    = tab === 'users' ? 'none' : '';
+    document.getElementById('statusFilter').style.display = tab === 'all'   ? '' : 'none';
+    document.getElementById('searchInput').placeholder    = tab === 'users'
+      ? 'Search by name, email, phone...'
+      : 'Search by brand, model, location...';
+    document.getElementById('searchInput').value = '';
 
     renderTable();
   }
 
-  // ════════════════════════════════════════════
-  //  FETCH ALL ADS
-  // ════════════════════════════════════════════
-  async function loadAds() {
-    showLoading();
-    try {
-      // Fetch all statuses in parallel
-      const [pendingRes, activeRes, rejectedRes] = await Promise.all([
-        fetch(`${API_BASE}/ads/admin/pending`).then(r => r.json()),
-        fetch(`${API_BASE}/ads/active`).then(r => r.json()),
-        fetch(`${API_BASE}/ads?status=rejected`).catch(() => ({ success: false, data: [] })),
-      ]);
+  // ════ FILTERED DATA ════
+  function getFiltered() {
+    const q   = (document.getElementById('searchInput')?.value || '').toLowerCase();
+    const cat = document.getElementById('catFilter')?.value || '';
+    const st  = document.getElementById('statusFilter')?.value || '';
 
-      // Combine all ads (deduplicated by _id)
-      const seen = new Set();
-      allAds = [];
-
-      const addAds = (arr) => {
-        (arr || []).forEach(ad => {
-          if (!seen.has(ad._id)) { seen.add(ad._id); allAds.push(ad); }
-        });
-      };
-
-      addAds(pendingRes.success  ? pendingRes.data  : []);
-      addAds(activeRes.success   ? activeRes.data   : []);
-
-      // Also try to get rejected/all via a general endpoint
-      try {
-        const allRes = await fetch(`${API_BASE}/ads/admin/pending`);
-        // We already have pending, fetch any rejected separately if endpoint exists
-      } catch(_) {}
-
-      updateStats();
-      renderTable();
-    } catch (err) {
-      showError('Could not connect to server. Check API_BASE URL.');
-    }
-  }
-
-  // Also fetch rejected ads separately
-  async function loadAllAds() {
-    showLoading();
-    try {
-      const [pendingRes, activeRes] = await Promise.all([
-        fetch(`${API_BASE}/ads/admin/pending`).then(r => r.json()).catch(() => ({ data: [] })),
-        fetch(`${API_BASE}/ads/active`).then(r => r.json()).catch(() => ({ data: [] })),
-      ]);
-
-      const seen = new Set();
-      allAds = [];
-
-      const addAds = (arr) => {
-        (arr || []).forEach(ad => {
-          if (!seen.has(ad._id)) { seen.add(ad._id); allAds.push(ad); }
-        });
-      };
-
-      addAds(pendingRes.data || []);
-      addAds(activeRes.data  || []);
-
-      updateStats();
-      renderTable();
-    } catch (err) {
-      showError('Server connection failed.');
-    }
-  }
-
-  // On page load, fetch all
-  async function loadAds() {
-    showLoading();
-    try {
-      const [pendingRes, activeRes] = await Promise.all([
-        fetch(`${API_BASE}/ads/admin/pending`).then(r => r.json()).catch(() => ({ success: false, data: [] })),
-        fetch(`${API_BASE}/ads/active`).then(r => r.json()).catch(() => ({ success: false, data: [] })),
-      ]);
-
-      const seen = new Set();
-      allAds = [];
-
-      const add = (arr) => (arr || []).forEach(ad => {
-        if (!seen.has(ad._id)) { seen.add(ad._id); allAds.push(ad); }
+    if (currentTab === 'users') {
+      return allUsers.filter(u => {
+        if (!q) return true;
+        return [u.fullName, u.email, u.phone].some(v => (v||'').toLowerCase().includes(q));
       });
-
-      add(pendingRes.data);
-      add(activeRes.data);
-
-      // Sort: newest first
-      allAds.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-      updateStats();
-      renderTable();
-    } catch (err) {
-      showError('⚠️ Could not connect to server. Please check if backend is running and API_BASE is correct.');
     }
-  }
-
-  // ════════════════════════════════════════════
-  //  STATS
-  // ════════════════════════════════════════════
-  function updateStats() {
-    const pending  = allAds.filter(a => a.status === 'pending').length;
-    const active   = allAds.filter(a => a.status === 'active').length;
-    const rejected = allAds.filter(a => a.status === 'rejected').length;
-    const total    = allAds.length;
-
-    document.getElementById('statPending').textContent  = pending;
-    document.getElementById('statActive').textContent   = active;
-    document.getElementById('statRejected').textContent = rejected;
-    document.getElementById('statTotal').textContent    = total;
-
-    document.getElementById('pendingCount').textContent  = pending;
-    document.getElementById('activeCount').textContent   = active;
-    document.getElementById('rejectedCount').textContent = rejected;
-    document.getElementById('allCount').textContent      = total;
-  }
-
-  // ════════════════════════════════════════════
-  //  RENDER TABLE
-  // ════════════════════════════════════════════
-  function getFilteredAds() {
-    const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
-    const cat    = document.getElementById('categoryFilter')?.value || '';
 
     return allAds.filter(ad => {
-      const matchTab = currentTab === 'all' || ad.status === currentTab;
+      const matchTab = currentTab === 'all' ? (!st || ad.status === st) : ad.status === currentTab;
       const matchCat = !cat || ad.categoryId === cat;
-      const matchSearch = !search || [ad.brand, ad.model, ad.location, ad.categoryLabel, ad.variant]
-        .some(v => (v || '').toLowerCase().includes(search));
-      return matchTab && matchCat && matchSearch;
+      const matchQ   = !q || [ad.brand, ad.model, ad.location, ad.categoryLabel,
+        ad.userId?.fullName, ad.userId?.phone].some(v => (v||'').toLowerCase().includes(q));
+      return matchTab && matchCat && matchQ;
     });
   }
 
-  function filterAds() { renderTable(); }
-
-  const CAT_EMOJI = { ac: '❄️', led: '📺', fridge: '🧊', washing: '🧺' };
-  const COND_LABEL = { new: 'Brand New', like_new: 'Like New', good: 'Good', fair: 'Fair', for_parts: 'For Parts' };
-
-  function timeAgo(dateStr) {
-    const diff = Date.now() - new Date(dateStr).getTime();
-    const m = Math.floor(diff / 60000);
-    if (m < 60)  return `${m}m ago`;
-    const h = Math.floor(m / 60);
-    if (h < 24)  return `${h}h ago`;
-    return `${Math.floor(h / 24)}d ago`;
-  }
-
+  // ════ RENDER ════
   function renderTable() {
-    const ads = getFilteredAds();
-    const container = document.getElementById('tableContent');
+    const data = getFiltered();
+    const cont = document.getElementById('tableContent');
 
-    if (ads.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📭</div>
-          <div class="empty-title">No ads found</div>
-          <div class="empty-desc">No ${currentTab === 'all' ? '' : currentTab + ' '}ads to show.</div>
-        </div>`;
+    if (!data.length) {
+      cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div>
+        <div class="empty-title">Nothing found</div>
+        <div class="empty-desc">Try different filters</div></div>`;
       return;
     }
 
-    const rows = ads.map(ad => {
-      const emoji = CAT_EMOJI[ad.categoryId] || '📦';
-      const cond  = COND_LABEL[ad.condition] || ad.condition || '—';
-      const price = `Rs ${Number(ad.price).toLocaleString()}`;
-      const time  = timeAgo(ad.createdAt);
-
-      let statusHtml = '';
-      if (ad.status === 'pending')  statusHtml = '<span class="status-badge pending">⏳ Pending</span>';
-      if (ad.status === 'active')   statusHtml = '<span class="status-badge active">✅ Active</span>';
-      if (ad.status === 'rejected') statusHtml = '<span class="status-badge rejected">❌ Rejected</span>';
-      if (ad.status === 'expired')  statusHtml = '<span class="status-badge expired">⌛ Expired</span>';
-
-      let actionBtns = '';
-      if (ad.status === 'pending') {
-        actionBtns = `
-          <button class="btn-approve" onclick="approveAd('${ad._id}')">✅ Approve</button>
-          <button class="btn-reject"  onclick="openRejectModal('${ad._id}', '${(ad.brand + ' ' + ad.model).replace(/'/g, '')}')">❌ Reject</button>
-        `;
-      } else if (ad.status === 'active') {
-        actionBtns = `
-          <button class="btn-reject" onclick="openRejectModal('${ad._id}', '${(ad.brand + ' ' + ad.model).replace(/'/g, '')}')">🔒 Deactivate</button>
-        `;
-      } else if (ad.status === 'rejected') {
-        actionBtns = `
-          <button class="btn-approve" onclick="approveAd('${ad._id}')">↩️ Re-approve</button>
-        `;
-      }
-
-      return `
-        <tr>
-          <td>
-            <div class="ad-info-cell">
-              <div class="ad-emoji-box">${emoji}</div>
-              <div>
-                <div class="ad-title-cell">${ad.brand} ${ad.model}</div>
-                <div class="ad-sub-cell">${ad.categoryLabel || ad.categoryId} ${ad.variant ? '· ' + ad.variant : ''}</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="price-cell">${price}</span></td>
-          <td>${cond}</td>
-          <td>${statusHtml}</td>
-          <td style="color:var(--text2);font-size:13px;">📍 ${ad.location}</td>
-          <td style="color:var(--text2);font-size:12px;">${time}</td>
-          <td>
-            <div class="action-btns">
-              ${actionBtns}
-              <button class="btn-view" onclick="viewDetail('${ad._id}')">👁</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
-
-    container.innerHTML = `
-      <table class="ads-table">
-        <thead>
-          <tr>
-            <th>Ad</th>
-            <th>Price</th>
-            <th>Condition</th>
-            <th>Status</th>
-            <th>Location</th>
-            <th>Posted</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>`;
-  }
-
-  // ════════════════════════════════════════════
-  //  APPROVE
-  // ════════════════════════════════════════════
-  async function approveAd(id) {
-    try {
-      const res  = await fetch(`${API_BASE}/ads/admin/${id}/approve`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ days: 30 }),
-      });
-      const json = await res.json();
-
-      if (json.success) {
-        // Update local state
-        const idx = allAds.findIndex(a => a._id === id);
-        if (idx !== -1) allAds[idx].status = 'active';
-        updateStats();
-        renderTable();
-        showToast('✅ Ad approved successfully!', 'success');
-      } else {
-        showToast('❌ ' + (json.message || 'Failed to approve'), 'error');
-      }
-    } catch (err) {
-      showToast('❌ Server error: ' + err.message, 'error');
+    if (currentTab === 'users') {
+      renderUsersTable(data, cont);
+    } else {
+      renderAdsTable(data, cont);
     }
   }
 
-  // ════════════════════════════════════════════
-  //  REJECT MODAL
-  // ════════════════════════════════════════════
+  // ─── Ads Table ───
+  function renderAdsTable(ads, cont) {
+    const rows = ads.map(ad => {
+      const emoji  = CAT_EMOJI[ad.categoryId] || '📦';
+      const cond   = COND_LABEL[ad.condition] || ad.condition || '—';
+      const price  = `Rs ${Number(ad.price || 0).toLocaleString()}`;
+      const time   = timeAgo(ad.createdAt);
+
+      // ✅ Seller info from populate
+      const seller = ad.userId;
+      const sName  = seller?.fullName || '—';
+      const sPhone = seller?.phone    || '—';
+      const sInit  = sName.charAt(0).toUpperCase();
+      const sImg   = seller?.profileImage;
+
+      const sellerHtml = `
+        <div class="seller-cell">
+          <div class="seller-avatar">
+            ${sImg ? `<img src="${sImg}" alt="${sInit}" onerror="this.parentElement.textContent='${sInit}'"/>` : sInit}
+          </div>
+          <div>
+            <div class="seller-name">${sName}</div>
+            <div class="seller-phone">${sPhone}</div>
+          </div>
+        </div>`;
+
+      const badge = statusBadge(ad.status);
+
+      let actions = '';
+      if (ad.status === 'pending') {
+        actions = `<button class="btn-approve" onclick="approveAd('${ad._id}')">✅ Approve</button>
+                   <button class="btn-reject"  onclick="openRejectModal('${ad._id}','${esc(ad.brand+' '+ad.model)}')">❌ Reject</button>`;
+      } else if (ad.status === 'active') {
+        actions = `<button class="btn-reject" onclick="openRejectModal('${ad._id}','${esc(ad.brand+' '+ad.model)}')">🔒 Deactivate</button>`;
+      } else if (ad.status === 'rejected') {
+        actions = `<button class="btn-approve" onclick="approveAd('${ad._id}')">↩️ Re-approve</button>`;
+      }
+
+      return `<tr>
+        <td><div class="ad-info-cell">
+          <div class="ad-emoji-box">${emoji}</div>
+          <div><div class="cell-title">${ad.brand} ${ad.model}</div>
+          <div class="cell-sub">${ad.categoryLabel||ad.categoryId}${ad.variant?' · '+ad.variant:''}</div></div>
+        </div></td>
+        <td><span class="price-cell">${price}</span></td>
+        <td style="color:var(--text2);font-size:12px;">${cond}</td>
+        <td>${sellerHtml}</td>
+        <td>${badge}</td>
+        <td style="color:var(--text2);font-size:12px;">📍 ${ad.location||'—'}</td>
+        <td style="color:var(--text2);font-size:12px;">${time}</td>
+        <td><div class="action-btns">${actions}
+          <button class="btn-view" onclick="viewAdDetail('${ad._id}')">👁</button>
+        </div></td>
+      </tr>`;
+    }).join('');
+
+    cont.innerHTML = `<table class="data-table">
+      <thead><tr>
+        <th>Ad</th><th>Price</th><th>Condition</th>
+        <th>Posted By</th><th>Status</th><th>Location</th><th>Posted</th><th>Actions</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  }
+
+  // ─── Users Table ───
+  function renderUsersTable(users, cont) {
+    const rows = users.map(u => {
+      const sInit = (u.fullName||'?').charAt(0).toUpperCase();
+      const sImg  = u.profileImage;
+      const since = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-PK',{year:'numeric',month:'short'}) : '—';
+      const s     = u.stats || {};
+
+      return `<tr>
+        <td><div class="seller-cell">
+          <div class="seller-avatar">
+            ${sImg ? `<img src="${sImg}" alt="${sInit}" onerror="this.parentElement.textContent='${sInit}'"/>` : sInit}
+          </div>
+          <div>
+            <div class="seller-name">${u.fullName||'—'}</div>
+            <div class="seller-phone">${u.email||'—'}</div>
+          </div>
+        </div></td>
+        <td style="color:var(--text2);font-size:12px;">${u.phone||'—'}</td>
+        <td><div class="user-stats">
+          <span class="user-stat-pill pill-active">${s.active||0} active</span>
+          <span class="user-stat-pill pill-pending">${s.pending||0} pending</span>
+          ${(s.rejected||0)>0?`<span class="user-stat-pill pill-rejected">${s.rejected} rejected</span>`:''}
+        </div></td>
+        <td style="color:var(--text2);font-size:12px;">📞 ${s.totalCalls||0} &nbsp;👁 ${s.totalViews||0}</td>
+        <td style="color:var(--text2);font-size:12px;">${since}</td>
+        <td><div class="action-btns">
+          <button class="btn-user-ads" onclick="viewUserDetail('${u._id}')">📋 View Ads</button>
+        </div></td>
+      </tr>`;
+    }).join('');
+
+    cont.innerHTML = `<table class="data-table">
+      <thead><tr>
+        <th>User</th><th>Phone</th><th>Ad Stats</th><th>Engagement</th><th>Member Since</th><th>Actions</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  }
+
+  // ════ APPROVE ════
+  async function approveAd(id) {
+    try {
+      const res  = await fetch(`${API}/ads/admin/${id}/approve`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({days:30})});
+      const json = await res.json();
+      if (json.success) {
+        const idx = allAds.findIndex(a => a._id === id);
+        if (idx !== -1) allAds[idx].status = 'active';
+        updateStats(); renderTable();
+        showToast('✅ Ad approved!', 'success');
+      } else { showToast('❌ '+(json.message||'Failed'), 'error'); }
+    } catch(e) { showToast('❌ Server error', 'error'); }
+  }
+
+  // ════ REJECT ════
   function openRejectModal(id, name) {
-    rejectingAdId = id;
-    document.getElementById('rejectModalSub').textContent = `Ad: ${name}`;
-    document.getElementById('rejectReason').value = '';
-    document.getElementById('rejectQuickReason').value = '';
+    rejectingId = id;
+    document.getElementById('rejectSub').textContent    = `Ad: ${name}`;
+    document.getElementById('rejectReason').value       = '';
+    document.getElementById('quickReason').value        = '';
     document.getElementById('rejectModal').classList.add('open');
-  }
-
-  function closeRejectModal() {
-    document.getElementById('rejectModal').classList.remove('open');
-    rejectingAdId = null;
-  }
-
-  function applyQuickReason() {
-    const val = document.getElementById('rejectQuickReason').value;
-    if (val) document.getElementById('rejectReason').value = val;
   }
 
   async function confirmReject() {
     const reason = document.getElementById('rejectReason').value.trim();
-    if (!reason) {
-      document.getElementById('rejectReason').focus();
-      document.getElementById('rejectReason').style.borderColor = 'var(--danger)';
-      return;
-    }
-
+    if (!reason) { document.getElementById('rejectReason').focus(); return; }
     try {
-      const res  = await fetch(`${API_BASE}/ads/admin/${rejectingAdId}/reject`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason }),
-      });
+      const res  = await fetch(`${API}/ads/admin/${rejectingId}/reject`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason})});
       const json = await res.json();
-
       if (json.success) {
-        const idx = allAds.findIndex(a => a._id === rejectingAdId);
+        const idx = allAds.findIndex(a => a._id === rejectingId);
         if (idx !== -1) { allAds[idx].status = 'rejected'; allAds[idx].rejectReason = reason; }
-        updateStats();
-        renderTable();
-        closeRejectModal();
-        showToast('Ad rejected with reason.', 'error');
-      } else {
-        showToast('❌ ' + (json.message || 'Failed to reject'), 'error');
-      }
-    } catch (err) {
-      showToast('❌ Server error: ' + err.message, 'error');
-    }
+        updateStats(); renderTable();
+        closeModal('rejectModal');
+        showToast('Ad rejected.', 'error');
+      } else { showToast('❌ '+(json.message||'Failed'), 'error'); }
+    } catch(e) { showToast('❌ Server error', 'error'); }
   }
 
-  // ════════════════════════════════════════════
-  //  DETAIL VIEW
-  // ════════════════════════════════════════════
-  function viewDetail(id) {
+  // ════ AD DETAIL ════
+  function viewAdDetail(id) {
     const ad = allAds.find(a => a._id === id);
     if (!ad) return;
 
-    const emoji = CAT_EMOJI[ad.categoryId] || '📦';
-    document.getElementById('detailModalTitle').textContent = `${emoji} ${ad.brand} ${ad.model}`;
-    document.getElementById('detailModalSub').textContent   = `Posted ${timeAgo(ad.createdAt)} · ${ad.views || 0} views · ${ad.calls || 0} calls`;
+    const seller = ad.userId;
+    document.getElementById('detailTitle').textContent = `${CAT_EMOJI[ad.categoryId]||'📦'} ${ad.brand} ${ad.model}`;
+    document.getElementById('detailSub').textContent   = `${timeAgo(ad.createdAt)} · 👁 ${ad.views||0} views · 📞 ${ad.calls||0} calls`;
 
     const fields = [
-      { label: 'Category',  value: ad.categoryLabel || ad.categoryId },
-      { label: 'Brand',     value: ad.brand },
-      { label: 'Model',     value: ad.model },
-      { label: 'Variant',   value: ad.variant || '—' },
-      { label: 'Condition', value: COND_LABEL[ad.condition] || ad.condition },
-      { label: 'Price',     value: `Rs ${Number(ad.price).toLocaleString()}` },
-      { label: 'Location',  value: ad.location },
-      { label: 'Phone',     value: ad.phone },
-      { label: 'Status',    value: ad.status.toUpperCase() },
-      { label: 'Images',    value: (ad.images?.length || 0) + ' photo(s)' },
+      {label:'Brand',     value: ad.brand},
+      {label:'Model',     value: ad.model},
+      {label:'Category',  value: ad.categoryLabel||ad.categoryId},
+      {label:'Condition', value: COND_LABEL[ad.condition]||ad.condition},
+      {label:'Price',     value: `Rs ${Number(ad.price||0).toLocaleString()}`},
+      {label:'Location',  value: ad.location||'—'},
+      {label:'Phone',     value: ad.phone||'—'},
+      {label:'Status',    value: ad.status?.toUpperCase()},
+      {label:'Images',    value: (ad.images?.length||0)+' photo(s)'},
+      {label:'Variant',   value: ad.variant||'—'},
+      // ✅ Seller info
+      {label:'Seller Name',  value: seller?.fullName||'—'},
+      {label:'Seller Phone', value: seller?.phone||'—'},
+      {label:'Seller Email', value: seller?.email||'—'},
     ];
 
-    document.getElementById('detailGrid').innerHTML = fields.map(f => `
-      <div class="detail-item">
-        <div class="detail-item-label">${f.label}</div>
-        <div class="detail-item-value">${f.value}</div>
-      </div>
-    `).join('');
+    document.getElementById('detailGrid').innerHTML = fields.map(f=>
+      `<div class="detail-item"><div class="detail-label">${f.label}</div><div class="detail-value">${f.value}</div></div>`
+    ).join('');
 
     const descEl = document.getElementById('detailDesc');
-    if (ad.description) {
-      descEl.textContent = '📝 ' + ad.description;
-      descEl.style.display = 'block';
-    } else {
-      descEl.style.display = 'none';
-    }
+    let descTxt  = '';
+    if (ad.description)  descTxt += '📝 '+ad.description;
+    if (ad.rejectReason) descTxt += (descTxt?'\n\n':'')+'❌ Reject Reason: '+ad.rejectReason;
+    if (descTxt) { descEl.textContent = descTxt; descEl.style.display = 'block'; }
+    else         { descEl.style.display = 'none'; }
 
-    if (ad.rejectReason) {
-      descEl.textContent += '\n\n❌ Reject Reason: ' + ad.rejectReason;
-      descEl.style.display = 'block';
-    }
+    let btns = '<button class="btn-modal-cancel" onclick="closeModal(\'detailModal\')">Close</button>';
+    if (ad.status === 'pending') btns = `
+      <button class="btn-modal-cancel" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#6EE7B7;"
+        onclick="closeModal('detailModal');approveAd('${ad._id}')">✅ Approve</button>
+      <button class="btn-modal-confirm"
+        onclick="closeModal('detailModal');openRejectModal('${ad._id}','${esc(ad.brand+' '+ad.model)}')">❌ Reject</button>`;
 
-    let btns = '';
-    if (ad.status === 'pending') {
-      btns = `
-        <button class="btn-modal-cancel" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#6EE7B7;"
-          onclick="closeDetail();approveAd('${ad._id}')">✅ Approve</button>
-        <button class="btn-modal-confirm"
-          onclick="closeDetail();openRejectModal('${ad._id}','${(ad.brand + ' ' + ad.model).replace(/'/g, '')}')">❌ Reject</button>
-      `;
-    } else {
-      btns = `<button class="btn-modal-cancel" onclick="closeDetail()">Close</button>`;
-    }
-
-    document.getElementById('detailModalBtns').innerHTML = btns;
+    document.getElementById('detailBtns').innerHTML = btns;
     document.getElementById('detailModal').classList.add('open');
   }
 
-  function closeDetail() {
-    document.getElementById('detailModal').classList.remove('open');
+  // ════ USER DETAIL ════
+  async function viewUserDetail(userId) {
+    const user = allUsers.find(u => String(u._id) === String(userId));
+    if (!user) return;
+
+    document.getElementById('userModalTitle').textContent = `👤 ${user.fullName||'User'}`;
+    document.getElementById('userModalSub').textContent   = `Member since ${user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-PK',{year:'numeric',month:'long'}) : '—'}`;
+
+    // Profile banner
+    const sInit = (user.fullName||'?').charAt(0).toUpperCase();
+    const s     = user.stats || {};
+    let bannerHtml = `
+      <div class="user-profile-banner">
+        <div class="user-big-avatar">
+          ${user.profileImage ? `<img src="${user.profileImage}" alt="${sInit}" onerror="this.parentElement.textContent='${sInit}'"/>` : sInit}
+        </div>
+        <div>
+          <div class="user-profile-name">${user.fullName||'—'}</div>
+          <div class="user-profile-email">✉️ ${user.email||'—'}</div>
+          <div class="user-profile-phone">📞 ${user.phone||'—'}</div>
+        </div>
+      </div>
+      <div class="detail-grid" style="margin-bottom:16px;">
+        <div class="detail-item"><div class="detail-label">Total Ads</div><div class="detail-value">${s.total||0}</div></div>
+        <div class="detail-item"><div class="detail-label">Active Ads</div><div class="detail-value" style="color:#6EE7B7;">${s.active||0}</div></div>
+        <div class="detail-item"><div class="detail-label">Pending Ads</div><div class="detail-value" style="color:#FCD34D;">${s.pending||0}</div></div>
+        <div class="detail-item"><div class="detail-label">Total Calls</div><div class="detail-value" style="color:#60A5FA;">${s.totalCalls||0}</div></div>
+        <div class="detail-item"><div class="detail-label">Total Views</div><div class="detail-value">${s.totalViews||0}</div></div>
+        <div class="detail-item"><div class="detail-label">Rejected</div><div class="detail-value" style="color:#FCA5A5;">${s.rejected||0}</div></div>
+      </div>`;
+
+    // ✅ Is user ke saare ads fetch karo
+    let adsHtml = '<div style="color:var(--text2);font-size:13px;padding:10px 0;">Loading ads...</div>';
+    document.getElementById('userModalBody').innerHTML = bannerHtml + adsHtml;
+    document.getElementById('userModal').classList.add('open');
+
+    try {
+      const res  = await fetch(`${API}/ads/seller/${userId}`);
+      const json = await res.json();
+      const ads  = json.data?.ads || [];
+
+      if (!ads.length) {
+        adsHtml = `<div style="text-align:center;padding:30px;color:var(--text2);">
+          <div style="font-size:36px;margin-bottom:10px;">📭</div>
+          <div>No active ads by this user</div></div>`;
+      } else {
+        const cards = ads.map(ad => {
+          const badge = statusBadge(ad.status);
+          return `<div class="user-ad-card" onclick="closeModal('userModal');setTimeout(()=>viewAdDetail('${ad._id}'),300)">
+            ${ad.images?.[0]
+              ? `<img src="${ad.images[0]}" class="user-ad-img" style="object-fit:cover;" />`
+              : `<div class="user-ad-img">${CAT_EMOJI[ad.categoryId]||'📦'}</div>`}
+            <div class="user-ad-info">
+              <div class="user-ad-price">Rs ${Number(ad.price||0).toLocaleString()}</div>
+              <div class="user-ad-name">${ad.brand} ${ad.model}</div>
+              <div class="user-ad-status">${badge}</div>
+            </div>
+          </div>`;
+        }).join('');
+        adsHtml = `<div style="font-size:13px;font-weight:800;color:var(--text2);margin-bottom:12px;">📋 All Ads (${ads.length})</div>
+          <div class="user-ads-grid">${cards}</div>`;
+      }
+
+      document.getElementById('userModalBody').innerHTML = bannerHtml + adsHtml;
+    } catch(e) {
+      document.getElementById('userModalBody').innerHTML = bannerHtml +
+        '<div style="color:#FCA5A5;font-size:13px;padding:10px;">Could not load user ads.</div>';
+    }
   }
 
-  // Close modal on overlay click
-  document.getElementById('rejectModal').addEventListener('click', function(e) {
-    if (e.target === this) closeRejectModal();
-  });
-  document.getElementById('detailModal').addEventListener('click', function(e) {
-    if (e.target === this) closeDetail();
-  });
+  // ════ HELPERS ════
+  function statusBadge(status) {
+    const map = {
+      pending:  '<span class="status-badge pending">⏳ Pending</span>',
+      active:   '<span class="status-badge active">✅ Active</span>',
+      rejected: '<span class="status-badge rejected">❌ Rejected</span>',
+      expired:  '<span class="status-badge expired">⌛ Expired</span>',
+    };
+    return map[status] || `<span class="status-badge">${status}</span>`;
+  }
 
-  // ════════════════════════════════════════════
-  //  HELPERS
-  // ════════════════════════════════════════════
+  function esc(str) { return (str||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+  function timeAgo(d) {
+    const m = Math.floor((Date.now()-new Date(d))/60000);
+    if (m < 60) return `${m}m ago`;
+    if (m < 1440) return `${Math.floor(m/60)}h ago`;
+    return `${Math.floor(m/1440)}d ago`;
+  }
+
   function showLoading() {
-    document.getElementById('tableContent').innerHTML = `
-      <div class="loading-state">
-        <div class="spinner"></div>
-        <div>Loading ads from server...</div>
-      </div>`;
+    document.getElementById('tableContent').innerHTML =
+      '<div class="loading-state"><div class="spinner"></div><div>Loading from server...</div></div>';
   }
 
   function showError(msg) {
-    document.getElementById('tableContent').innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">⚠️</div>
-        <div class="empty-title">Connection Error</div>
-        <div class="empty-desc">${msg}</div>
-      </div>`;
+    document.getElementById('tableContent').innerHTML =
+      `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Connection Error</div><div class="empty-desc">${msg}</div></div>`;
   }
 
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+  });
+
   let toastTimer;
-  function showToast(msg, type = 'success') {
+  function showToast(msg, type='success') {
     const el = document.getElementById('toast');
     el.textContent = msg;
     el.className   = `toast ${type} show`;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3500);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
   }
 
-  // Enter key on login
   document.getElementById('emailInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('passwordInput').focus();
   });
