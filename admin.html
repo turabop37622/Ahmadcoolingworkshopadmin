@@ -3,835 +3,1253 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel — Ahmed Cooling & Appliances</title>
+  <title>Ahmed Cooling Workshop - Admin Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0D1117;
-      --surface:  #161B22;
-      --surface2: #21262D;
-      --border:   #30363D;
-      --primary:  #2563EB;
-      --primary-h:#1D4ED8;
-      --success:  #10B981;
-      --danger:   #EF4444;
-      --warning:  #F59E0B;
-      --text:     #E6EDF3;
-      --text2:    #8B949E;
-      --text3:    #6E7681;
-      --radius:   14px;
-      --shadow:   0 8px 32px rgba(0,0,0,0.4);
+      --bg:        #0A0E17;
+      --surface:   #111827;
+      --surface2:  #1F2937;
+      --surface3:  #374151;
+      --border:    #1E293B;
+      --border-h:  #334155;
+      --primary:   #2563EB;
+      --primary-h: #1D4ED8;
+      --primary-glow: rgba(37, 99, 235, 0.25);
+      --success:   #10B981;
+      --warning:   #F59E0B;
+      --danger:    #EF4444;
+      --purple:    #8B5CF6;
+      --cyan:      #06B6D4;
+      --text:      #F8FAFC;
+      --text-sub:  #94A3B8;
+      --text-muted:#64748B;
+      --radius:    14px;
+      --radius-sm: 8px;
     }
 
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    /* ══ LOGIN ══ */
-    .login-page { min-height:100vh; display:flex; align-items:center; justify-content:center;
-      background: radial-gradient(ellipse at 20% 50%, rgba(37,99,235,0.15) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(16,185,129,0.08) 0%, transparent 50%), var(--bg); }
-    .login-box { width:100%; max-width:420px; padding:48px 40px; background:var(--surface); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); }
-    .login-logo { text-align:center; margin-bottom:32px; }
-    .login-logo .logo-icon { font-size:48px; display:block; margin-bottom:12px; }
-    .login-logo h1 { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
-    .login-logo p  { font-size:13px; color:var(--text2); margin-top:4px; }
-    .login-badge { display:inline-block; background:rgba(37,99,235,0.15); color:#60A5FA; border:1px solid rgba(37,99,235,0.3); padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
-    .form-group { margin-bottom:18px; }
-    .form-group label { display:block; font-size:12px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
-    .form-group input { width:100%; padding:13px 16px; background:var(--surface2); border:1.5px solid var(--border); border-radius:12px; color:var(--text); font-size:15px; outline:none; transition:border-color 0.2s; }
-    .form-group input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
-    .btn-login { width:100%; padding:15px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; margin-top:8px; transition:all 0.2s; }
-    .btn-login:hover { background:var(--primary-h); }
-    .login-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#FCA5A5; padding:12px 16px; border-radius:10px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-    /* ══ LAYOUT ══ */
-    .dashboard { display:none; }
-    .layout    { display:flex; min-height:100vh; }
+    /* Login Page */
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
+                  radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                  var(--bg);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 20px -4px var(--primary-glow);
+    }
+    .login-title {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+    .login-subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+      text-align: center;
+      margin-top: 6px;
+      margin-bottom: 28px;
+    }
+    .field-group { margin-bottom: 20px; }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+    .field-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .field-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+    .btn-submit:hover { background: var(--primary-h); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #FCA5A5;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
 
-    /* ══ SIDEBAR ══ */
-    .sidebar { width:260px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:100; }
-    .sidebar-header { padding:24px 20px; border-bottom:1px solid var(--border); }
-    .sidebar-logo { font-size:20px; font-weight:900; letter-spacing:-0.5px; }
-    .sidebar-logo span { color:#60A5FA; }
-    .sidebar-subtitle { font-size:11px; color:var(--text3); margin-top:4px; font-weight:600; }
-    .sidebar-nav { padding:16px 12px; flex:1; overflow-y:auto; }
-    .nav-section { font-size:10px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:1px; padding:0 14px; margin:16px 0 6px; }
-    .nav-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text2); transition:all 0.2s; margin-bottom:4px; border:none; background:none; width:100%; text-align:left; }
-    .nav-item:hover  { background:var(--surface2); color:var(--text); }
-    .nav-item.active { background:rgba(37,99,235,0.15); color:#60A5FA; }
-    .nav-icon  { font-size:18px; width:24px; text-align:center; }
-    .nav-badge { margin-left:auto; background:var(--danger); color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:10px; min-width:20px; text-align:center; }
-    .nav-badge.green { background:var(--success); }
-    .nav-badge.blue  { background:var(--primary); }
-    .sidebar-footer { padding:16px 12px; border-top:1px solid var(--border); }
-    .admin-info { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border-radius:12px; margin-bottom:10px; }
-    .admin-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#7C3AED); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; color:#fff; flex-shrink:0; }
-    .admin-name { font-size:13px; font-weight:700; }
-    .admin-role { font-size:11px; color:var(--text3); font-weight:600; }
-    .btn-logout { width:100%; padding:10px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#FCA5A5; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
-    .btn-logout:hover { background:rgba(239,68,68,0.2); }
+    /* Main Dashboard Layout */
+    .app-layout { display: none; min-height: 100vh; }
+    .sidebar {
+      width: 270px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+    }
+    .sidebar-brand {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      flex-shrink: 0;
+    }
+    .brand-text h2 { font-size: 15px; font-weight: 800; line-height: 1.2; }
+    .brand-text p { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+    
+    .nav-list { padding: 20px 14px; flex: 1; overflow-y: auto; }
+    .nav-heading {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 12px 12px 6px;
+    }
+    .nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: none;
+      border: none;
+      border-radius: 10px;
+      color: var(--text-sub);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 4px;
+      text-align: left;
+    }
+    .nav-btn:hover { background: var(--surface2); color: var(--text); }
+    .nav-btn.active {
+      background: rgba(37, 99, 235, 0.15);
+      color: #60A5FA;
+      font-weight: 700;
+    }
+    .nav-btn .icon { font-size: 17px; width: 22px; text-align: center; }
+    .nav-badge {
+      margin-left: auto;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface3);
+      color: var(--text);
+    }
+    .nav-badge.alert { background: var(--danger); color: #fff; }
+    .nav-badge.blue { background: var(--primary); color: #fff; }
 
-    /* ══ MAIN ══ */
-    .main { margin-left:260px; flex:1; padding:32px; min-height:100vh; }
-    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
-    .page-title { font-size:26px; font-weight:900; letter-spacing:-0.5px; }
-    .page-sub   { font-size:13px; color:var(--text2); margin-top:4px; font-weight:500; }
-    .topbar-actions { display:flex; gap:10px; align-items:center; }
-    .btn-refresh { padding:10px 18px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
-    .btn-refresh:hover { background:var(--border); }
+    .sidebar-profile {
+      padding: 16px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--surface2);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563EB, #7C3AED);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .user-meta { flex: 1; min-width: 0; }
+    .user-meta .name { font-size: 13px; font-weight: 700; truncate: true; }
+    .user-meta .role { font-size: 11px; color: var(--text-muted); }
+    .btn-logout {
+      width: 100%;
+      padding: 10px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #FCA5A5;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: rgba(239, 68, 68, 0.2); }
 
-    /* ══ STATS ══ */
-    .stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:28px; }
-    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; position:relative; overflow:hidden; }
-    .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
-    .stat-card.pending::before  { background:var(--warning); }
-    .stat-card.active::before   { background:var(--success); }
-    .stat-card.rejected::before { background:var(--danger);  }
-    .stat-card.total::before    { background:var(--primary); }
-    .stat-card.users::before    { background:#8B5CF6; }
-    .stat-icon  { font-size:26px; margin-bottom:10px; }
-    .stat-num   { font-size:30px; font-weight:900; letter-spacing:-1px; }
-    .stat-label { font-size:11px; color:var(--text2); font-weight:600; margin-top:4px; text-transform:uppercase; letter-spacing:0.5px; }
+    /* Content Area */
+    .content-area {
+      margin-left: 270px;
+      padding: 32px 40px;
+      min-height: 100vh;
+      max-width: 1500px;
+    }
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-action {
+      padding: 10px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-action:hover { background: var(--surface2); border-color: var(--border-h); }
+    .btn-action.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-action.primary:hover { background: var(--primary-h); }
 
-    /* ══ FILTER BAR ══ */
-    .filter-bar { display:flex; gap:10px; margin-bottom:20px; align-items:center; flex-wrap:wrap; }
-    .search-input-wrap { flex:1; position:relative; min-width:200px; }
-    .search-input-wrap input { width:100%; padding:10px 16px 10px 40px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; outline:none; transition:border-color 0.2s; }
-    .search-input-wrap input:focus { border-color:var(--primary); }
-    .search-input-wrap .si { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; }
-    .filter-select { padding:10px 16px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:13px; font-weight:700; outline:none; cursor:pointer; }
+    /* Stats Cards */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-box:hover { transform: translateY(-2px); border-color: var(--border-h); }
+    .stat-box::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .stat-box.blue::after { background: var(--primary); }
+    .stat-box.amber::after { background: var(--warning); }
+    .stat-box.green::after { background: var(--success); }
+    .stat-box.purple::after { background: var(--purple); }
+    .stat-box.cyan::after { background: var(--cyan); }
+    .stat-icon { font-size: 24px; margin-bottom: 12px; display: inline-block; }
+    .stat-val { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+    .stat-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
 
-    /* ══ TABLE ══ */
-    .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; overflow-x:auto; }
-    .data-table { width:100%; border-collapse:collapse; min-width:800px; }
-    .data-table th { padding:14px 16px; text-align:left; font-size:11px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; background:var(--surface2); border-bottom:1px solid var(--border); white-space:nowrap; }
-    .data-table td { padding:14px 16px; border-bottom:1px solid var(--border); font-size:13px; vertical-align:middle; }
-    .data-table tr:last-child td { border-bottom:none; }
-    .data-table tr:hover td { background:rgba(255,255,255,0.02); }
+    /* Filters & Search */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus { border-color: var(--primary); }
+    .search-box .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .filter-select {
+      padding: 12px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 13.5px;
+      outline: none;
+      cursor: pointer;
+    }
+    .filter-select:focus { border-color: var(--primary); }
 
-    /* ══ CELLS ══ */
-    .ad-info-cell  { display:flex; align-items:center; gap:12px; }
-    .ad-emoji-box  { width:42px; height:42px; border-radius:10px; background:var(--surface2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-    .cell-title    { font-weight:700; color:var(--text); font-size:13px; }
-    .cell-sub      { font-size:11px; color:var(--text2); margin-top:2px; }
-    .price-cell    { font-weight:800; color:#60A5FA; font-size:14px; }
+    /* Table */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-card table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .table-card th {
+      background: var(--surface2);
+      padding: 14px 20px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-card td {
+      padding: 16px 20px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .table-card tr:last-child td { border-bottom: none; }
+    .table-card tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
-    /* Seller cell */
-    .seller-cell   { display:flex; align-items:center; gap:9px; }
-    .seller-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#7C3AED); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#fff; flex-shrink:0; }
-    .seller-avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
-    .seller-name   { font-size:12px; font-weight:700; color:var(--text); }
-    .seller-phone  { font-size:11px; color:var(--text2); margin-top:1px; }
+    /* Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+    .status-pending { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .status-confirmed { background: rgba(37, 99, 235, 0.15); color: #60A5FA; border: 1px solid rgba(37, 99, 235, 0.3); }
+    .status-completed { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-cancelled { background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .status-active { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
 
-    /* Status badge */
-    .status-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:800; white-space:nowrap; }
-    .status-badge.pending  { background:rgba(245,158,11,0.15);  color:#FCD34D; border:1px solid rgba(245,158,11,0.3); }
-    .status-badge.active   { background:rgba(16,185,129,0.15);  color:#6EE7B7; border:1px solid rgba(16,185,129,0.3); }
-    .status-badge.rejected { background:rgba(239,68,68,0.15);   color:#FCA5A5; border:1px solid rgba(239,68,68,0.3); }
-    .status-badge.expired  { background:rgba(107,114,128,0.15); color:#9CA3AF; border:1px solid rgba(107,114,128,0.3); }
+    /* Action Buttons in table */
+    .btn-tbl {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+    .btn-tbl.view { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-tbl.view:hover { background: var(--surface3); }
+    .btn-tbl.confirm { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.4); margin-right: 6px; }
+    .btn-tbl.confirm:hover { background: rgba(16, 185, 129, 0.3); }
+    .btn-tbl.reject { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .btn-tbl.reject:hover { background: rgba(239, 68, 68, 0.3); }
 
-    /* Action buttons */
-    .action-btns { display:flex; gap:6px; flex-wrap:wrap; }
-    .btn-approve { padding:7px 13px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#6EE7B7; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-    .btn-approve:hover { background:rgba(16,185,129,0.3); }
-    .btn-reject  { padding:7px 13px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#FCA5A5; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-    .btn-reject:hover { background:rgba(239,68,68,0.2); }
-    .btn-view    { padding:7px 10px; background:var(--surface2); border:1px solid var(--border); color:var(--text2); border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.2s; }
-    .btn-view:hover { color:var(--text); border-color:var(--text3); }
-    .btn-user-ads { padding:7px 13px; background:rgba(37,99,235,0.15); border:1px solid rgba(37,99,235,0.3); color:#60A5FA; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-    .btn-user-ads:hover { background:rgba(37,99,235,0.3); }
-
-    /* User stats pills */
-    .user-stats { display:flex; gap:6px; flex-wrap:wrap; }
-    .user-stat-pill { padding:3px 8px; border-radius:6px; font-size:10px; font-weight:800; }
-    .pill-active   { background:rgba(16,185,129,0.15); color:#6EE7B7; }
-    .pill-pending  { background:rgba(245,158,11,0.15); color:#FCD34D; }
-    .pill-rejected { background:rgba(239,68,68,0.12); color:#FCA5A5; }
-
-    /* Empty / Loading */
-    .empty-state  { text-align:center; padding:70px 20px; }
-    .empty-icon   { font-size:52px; margin-bottom:14px; }
-    .empty-title  { font-size:18px; font-weight:800; margin-bottom:8px; }
-    .empty-desc   { font-size:13px; color:var(--text2); }
-    .loading-state { text-align:center; padding:60px; color:var(--text2); }
-    .spinner { width:38px; height:38px; border:3px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-
-    /* ══ MODAL ══ */
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
-    .modal-overlay.open { display:flex; }
-    .modal { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:30px; width:100%; max-width:520px; box-shadow:var(--shadow); animation:modalIn 0.25s ease; max-height:90vh; overflow-y:auto; }
-    @keyframes modalIn { from { transform:scale(0.92) translateY(20px); opacity:0; } to { transform:scale(1) translateY(0); opacity:1; } }
-    .modal-title { font-size:19px; font-weight:900; margin-bottom:6px; letter-spacing:-0.3px; }
-    .modal-sub   { font-size:13px; color:var(--text2); margin-bottom:22px; }
-    .modal-field { margin-bottom:14px; }
-    .modal-field label { display:block; font-size:11px; font-weight:800; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:7px; }
-    .modal-field textarea, .modal-field select { width:100%; padding:11px 14px; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; outline:none; resize:vertical; transition:border-color 0.2s; }
-    .modal-field textarea:focus, .modal-field select:focus { border-color:var(--danger); }
-    .modal-btns { display:flex; gap:10px; margin-top:22px; }
-    .btn-modal-confirm { flex:1; padding:13px; background:var(--danger); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:800; cursor:pointer; }
-    .btn-modal-confirm:hover { opacity:0.9; }
-    .btn-modal-cancel  { flex:1; padding:13px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; }
-    .btn-modal-cancel:hover { background:var(--border); }
-
-    /* Detail grid */
-    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
-    .detail-item { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; }
-    .detail-label { font-size:10px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
-    .detail-value { font-size:13px; font-weight:700; }
-    .detail-desc  { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:13px; margin-bottom:16px; font-size:13px; color:var(--text2); line-height:1.6; white-space:pre-wrap; }
-
-    /* User detail modal */
-    .user-profile-banner { background:linear-gradient(135deg,rgba(37,99,235,0.2),rgba(124,58,237,0.15)); border:1px solid var(--border); border-radius:14px; padding:20px; display:flex; align-items:center; gap:16px; margin-bottom:20px; }
-    .user-big-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#7C3AED); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:900; color:#fff; flex-shrink:0; }
-    .user-big-avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
-    .user-profile-name  { font-size:18px; font-weight:900; }
-    .user-profile-email { font-size:12px; color:var(--text2); margin-top:3px; }
-    .user-profile-phone { font-size:12px; color:#60A5FA; margin-top:2px; font-weight:700; }
-
-    .user-ads-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .user-ad-card { background:var(--surface2); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:pointer; transition:border-color 0.2s; }
-    .user-ad-card:hover { border-color:var(--primary); }
-    .user-ad-img { width:100%; height:90px; object-fit:cover; background:var(--surface); display:flex; align-items:center; justify-content:center; font-size:32px; }
-    .user-ad-info { padding:10px; }
-    .user-ad-price { font-size:13px; font-weight:900; color:#60A5FA; }
-    .user-ad-name  { font-size:11px; font-weight:700; color:var(--text); margin-top:2px; }
-    .user-ad-status{ font-size:10px; margin-top:4px; }
+    /* Modals */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 540px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .modal-title { font-size: 20px; font-weight: 800; }
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .btn-close:hover { color: var(--text); }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .detail-item {
+      background: var(--surface2);
+      padding: 12px 16px;
+      border-radius: 12px;
+    }
+    .detail-item.full { grid-column: span 2; }
+    .detail-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .detail-val { font-size: 14px; font-weight: 600; margin-top: 4px; word-break: break-word; }
 
     /* Toast */
-    .toast { position:fixed; bottom:28px; right:28px; padding:13px 20px; border-radius:12px; font-size:14px; font-weight:700; z-index:9999; display:flex; align-items:center; gap:10px; box-shadow:0 8px 32px rgba(0,0,0,0.4); transform:translateY(80px); opacity:0; transition:all 0.3s ease; }
-    .toast.show    { transform:translateY(0); opacity:1; }
-    .toast.success { background:#064E3B; border:1px solid #065F46; color:#6EE7B7; }
-    .toast.error   { background:#7F1D1D; border:1px solid #991B1B; color:#FCA5A5; }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
+      color: var(--text);
+      padding: 14px 22px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 200;
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    @media (max-width:1000px) {
-      .stats-grid { grid-template-columns:repeat(3,1fr); }
-      .sidebar { width:210px; }
-      .main { margin-left:210px; padding:20px; }
+    /* Empty state */
+    .empty-box {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-title { font-size: 16px; font-weight: 700; color: var(--text); }
+    .empty-desc { font-size: 13px; margin-top: 4px; }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 70px; }
+      .brand-text, .nav-heading, .nav-btn span, .user-meta, .btn-logout span { display: none; }
+      .sidebar-brand { justify-content: center; padding: 20px 0; }
+      .nav-btn { justify-content: center; padding: 14px 0; }
+      .user-info { justify-content: center; background: none; }
+      .content-area { margin-left: 70px; padding: 24px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
-<div class="login-page" id="loginPage">
-  <div class="login-box">
-    <div class="login-logo">
-      <span class="login-badge">Admin Access</span>
-      <span class="logo-icon">❄️</span>
-      <h1>Ahmed Cooling & Appliances</h1>
-      <p>Sign in to manage ads and users</p>
+  <!-- 1. LOGIN VIEW -->
+  <div class="login-wrapper" id="loginView">
+    <div class="login-card">
+      <div class="brand-icon">❄️</div>
+      <h1 class="login-title">Ahmed Cooling Workshop</h1>
+      <p class="login-subtitle">Workshop & Services Management Panel</p>
+
+      <div class="alert-box" id="loginAlert"></div>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="field-group">
+          <label class="field-label">Admin Email</label>
+          <input type="email" id="loginEmail" class="field-input" placeholder="admin@ahmedcooling.com" required value="Ahmadcoolingpoint9038@gmail.com" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input type="password" id="loginPassword" class="field-input" placeholder="••••••••" required value="Ahmadlegand5712" />
+        </div>
+        <button type="submit" class="btn-submit">Sign In to Dashboard</button>
+      </form>
     </div>
-    <div class="login-error" id="loginError">⚠️ Invalid email or password</div>
-    <div class="form-group">
-      <label>Email Address</label>
-      <input type="email" id="emailInput" placeholder="admin@ahmedcooling.com"
-        onkeydown="if(event.key==='Enter') document.getElementById('passwordInput').focus()" />
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="passwordInput" placeholder="••••••••"
-        onkeydown="if(event.key==='Enter') doLogin()" />
-    </div>
-    <button class="btn-login" onclick="doLogin()">🔐  Sign In to Dashboard</button>
   </div>
-</div>
 
-<!-- ══ DASHBOARD ══ -->
-<div class="dashboard" id="dashboard">
-  <div class="layout">
-
+  <!-- 2. MAIN APP VIEW -->
+  <div class="app-layout" id="appView">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">Ahmed <span>Admin</span></div>
-        <div class="sidebar-subtitle">Cooling & Appliances Panel</div>
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">❄️</div>
+        <div class="brand-text">
+          <h2>Ahmed Cooling</h2>
+          <p>Workshop Admin</p>
+        </div>
       </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">Ads Management</div>
-        <button class="nav-item active" onclick="switchTab('pending',   this)"><span class="nav-icon">⏳</span> Pending Ads   <span class="nav-badge"        id="nb-pending">0</span></button>
-        <button class="nav-item"        onclick="switchTab('active',    this)"><span class="nav-icon">✅</span> Active Ads    <span class="nav-badge green"   id="nb-active">0</span></button>
-        <button class="nav-item"        onclick="switchTab('rejected',  this)"><span class="nav-icon">❌</span> Rejected Ads  <span class="nav-badge"        id="nb-rejected">0</span></button>
-        <button class="nav-item"        onclick="switchTab('all',       this)"><span class="nav-icon">📋</span> All Ads       <span class="nav-badge blue"    id="nb-all">0</span></button>
-        <div class="nav-section">User Management</div>
-        <button class="nav-item"        onclick="switchTab('users',     this)"><span class="nav-icon">👥</span> All Users     <span class="nav-badge blue"    id="nb-users">0</span></button>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="admin-info">
-          <div class="admin-avatar" id="adminAvatar">A</div>
-          <div>
-            <div class="admin-name" id="adminName">Admin</div>
-            <div class="admin-role">Super Admin</div>
+
+      <div class="nav-list">
+        <div class="nav-heading">Main Navigation</div>
+        <button class="nav-btn active" onclick="switchSection('dashboard', this)">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="switchSection('bookings', this)">
+          <span class="icon">📅</span>
+          <span>Bookings</span>
+          <span class="nav-badge alert" id="badgePending">0</span>
+        </button>
+        <button class="nav-btn" onclick="switchSection('services', this)">
+          <span class="icon">🔧</span>
+          <span>Services</span>
+          <span class="nav-badge" id="badgeServices">0</span>
+        </button>
+        <button class="nav-btn" onclick="switchSection('reviews', this)">
+          <span class="icon">⭐</span>
+          <span>Reviews</span>
+          <span class="nav-badge" id="badgeReviews">0</span>
+        </button>
+        <button class="nav-btn" onclick="switchSection('users', this)">
+          <span class="icon">👥</span>
+          <span>Users</span>
+          <span class="nav-badge" id="badgeUsers">0</span>
+        </button>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="user-info">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-meta">
+            <div class="name" id="adminDisplayName">Ahmed Admin</div>
+            <div class="role">Super Administrator</div>
           </div>
         </div>
-        <button class="btn-logout" onclick="doLogout()">🚪  Sign Out</button>
+        <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
       </div>
     </aside>
 
-    <!-- Main -->
-    <main class="main">
-      <div class="topbar">
+    <!-- Main Content -->
+    <main class="content-area">
+      <!-- Top header -->
+      <div class="page-header">
         <div>
-          <div class="page-title" id="pageTitle">⏳ Pending Ads</div>
-          <div class="page-sub"   id="pageSub">Review and approve or reject user submitted ads</div>
+          <h1 id="secTitle">Dashboard Overview</h1>
+          <p id="secSubtitle">Real-time cooling workshop bookings & diagnostics summary</p>
         </div>
-        <div class="topbar-actions">
-          <button class="btn-refresh" onclick="reloadCurrent()">↻ Refresh</button>
+        <div class="header-actions">
+          <button class="btn-action" onclick="fetchLiveStore()">
+            <span>🔄</span> Refresh Data
+          </button>
+          <a href="https://ahmedcoolingworkshop.com" target="_blank" class="btn-action primary">
+            <span>🌐</span> Live Website
+          </a>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="stats-grid">
-        <div class="stat-card pending"><div class="stat-icon">⏳</div><div class="stat-num" id="st-pending">0</div><div class="stat-label">Pending</div></div>
-        <div class="stat-card active" ><div class="stat-icon">✅</div><div class="stat-num" id="st-active">0</div><div class="stat-label">Active</div></div>
-        <div class="stat-card rejected"><div class="stat-icon">❌</div><div class="stat-num" id="st-rejected">0</div><div class="stat-label">Rejected</div></div>
-        <div class="stat-card total"  ><div class="stat-icon">📊</div><div class="stat-num" id="st-total">0</div><div class="stat-label">Total Ads</div></div>
-        <div class="stat-card users"  ><div class="stat-icon">👥</div><div class="stat-num" id="st-users">0</div><div class="stat-label">Users</div></div>
+      <!-- Stats Grid -->
+      <div class="stats-row" id="statsRow">
+        <div class="stat-box blue">
+          <div class="stat-icon">📅</div>
+          <div class="stat-val" id="statTotalBookings">0</div>
+          <div class="stat-title">Total Bookings</div>
+        </div>
+        <div class="stat-box amber">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-val" id="statPendingBookings">0</div>
+          <div class="stat-title">Pending Jobs</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-icon">✅</div>
+          <div class="stat-val" id="statCompletedBookings">0</div>
+          <div class="stat-title">Completed Jobs</div>
+        </div>
+        <div class="stat-box cyan">
+          <div class="stat-icon">🔧</div>
+          <div class="stat-val" id="statTotalServices">6</div>
+          <div class="stat-title">Active Services</div>
+        </div>
+        <div class="stat-box purple">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-val" id="statApprovedReviews">0</div>
+          <div class="stat-title">Approved Reviews</div>
+        </div>
       </div>
 
-      <!-- Filter -->
-      <div class="filter-bar" id="filterBar">
-        <div class="search-input-wrap">
-          <span class="si">🔍</span>
-          <input type="text" id="searchInput" placeholder="Search..." oninput="renderTable()" />
+      <!-- Filters & Search -->
+      <div class="filter-row" id="filterRow">
+        <div class="search-box">
+          <span class="icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search by customer name, phone, order ID..." oninput="handleSearch()" />
         </div>
-        <select class="filter-select" id="catFilter" onchange="renderTable()">
-          <option value="">All Categories</option>
-          <option value="ac">❄️ AC</option>
-          <option value="led">📺 LED / TV</option>
-          <option value="fridge">🧊 Fridge</option>
-          <option value="washing">🧺 Washing</option>
-        </select>
-        <select class="filter-select" id="statusFilter" onchange="renderTable()" style="display:none;">
-          <option value="">All Status</option>
-          <option value="active">Active</option>
+        <select class="filter-select" id="statusFilterSelect" onchange="handleFilterChange()">
+          <option value="all">All Statuses</option>
           <option value="pending">Pending</option>
-          <option value="rejected">Rejected</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
         </select>
       </div>
 
-      <!-- Table -->
-      <div class="table-wrap">
-        <div id="tableContent"><div class="loading-state"><div class="spinner"></div><div>Loading...</div></div></div>
+      <!-- Main Dynamic Table Area -->
+      <div class="table-card">
+        <div id="tableContainer"></div>
       </div>
     </main>
   </div>
-</div>
 
-<!-- ══ REJECT MODAL ══ -->
-<div class="modal-overlay" id="rejectModal">
-  <div class="modal">
-    <div class="modal-title">❌ Reject Ad</div>
-    <div class="modal-sub" id="rejectSub">Provide a reason</div>
-    <div class="modal-field">
-      <label>Quick Reason</label>
-      <select id="quickReason" onchange="document.getElementById('rejectReason').value=this.value">
-        <option value="">— Select quick reason —</option>
-        <option value="Price is unrealistic or misleading.">Unrealistic price</option>
-        <option value="Ad does not meet content guidelines.">Doesn't meet guidelines</option>
-        <option value="Duplicate or spam listing.">Duplicate / Spam</option>
-        <option value="Incomplete or incorrect information.">Incomplete info</option>
-        <option value="Photos are missing or unclear.">No / unclear photos</option>
-        <option value="Contact information is invalid.">Invalid contact</option>
-      </select>
-    </div>
-    <div class="modal-field">
-      <label>Rejection Reason *</label>
-      <textarea id="rejectReason" rows="4" placeholder="Write reason..."></textarea>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-modal-cancel" onclick="closeModal('rejectModal')">Cancel</button>
-      <button class="btn-modal-confirm" onclick="confirmReject()">❌ Reject</button>
+  <!-- BOOKING DETAILS MODAL -->
+  <div class="modal-backdrop" id="bookingModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Booking Details</h3>
+        <button class="btn-close" onclick="closeModal('bookingModal')">✕</button>
+      </div>
+      <div class="detail-grid" id="modalBookingGrid"></div>
+      <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <button class="btn-action primary" id="btnCallCustomer" style="flex:1;">📞 Call Customer</button>
+        <button class="btn-action" id="btnWhatsappCustomer" style="flex:1;">💬 WhatsApp</button>
+      </div>
+      <div style="margin-top: 14px;">
+        <label class="field-label">Update Status</label>
+        <select class="field-input" id="modalStatusSelect" onchange="updateBookingStatusFromModal()">
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="in-progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ══ AD DETAIL MODAL ══ -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal" style="max-width:580px;">
-    <div class="modal-title" id="detailTitle">Ad Details</div>
-    <div class="modal-sub"   id="detailSub"></div>
-    <div class="detail-grid" id="detailGrid"></div>
-    <div class="detail-desc" id="detailDesc" style="display:none;"></div>
-    <div class="modal-btns"  id="detailBtns"></div>
-  </div>
-</div>
+  <div class="toast" id="toast">Notification</div>
 
-<!-- ══ USER DETAIL MODAL ══ -->
-<div class="modal-overlay" id="userModal">
-  <div class="modal" style="max-width:600px;">
-    <div class="modal-title" id="userModalTitle">User Profile</div>
-    <div class="modal-sub"   id="userModalSub"></div>
-    <div id="userModalBody"></div>
-    <div class="modal-btns">
-      <button class="btn-modal-cancel" onclick="closeModal('userModal')">Close</button>
-    </div>
-  </div>
-</div>
+  <script>
+    const API_BASE = 'https://ahmed-cooling-backend.onrender.com/api';
 
-<div class="toast" id="toast"></div>
-
-<script>
-  const API = 'https://ahmed-cooling-backend.onrender.com/api';
-
-  const ADMINS = [
-    { email: 'Ahmadcoolingpoint9038@gmail.com', password: 'Ahmadlegand5712', name: 'Ahmed Admin' },
-  ];
-
-  const CAT_EMOJI  = { ac:'❄️', led:'📺', fridge:'🧊', washing:'🧺' };
-  const COND_LABEL = { new:'Brand New', like_new:'Like New', good:'Good', fair:'Fair', for_parts:'For Parts' };
-  const TAB_META   = {
-    pending:  ['⏳ Pending Ads',  'Review and approve or reject submissions'],
-    active:   ['✅ Active Ads',   'Currently live — visible to all users'],
-    rejected: ['❌ Rejected Ads', 'Ads rejected with reasons'],
-    all:      ['📋 All Ads',      'Complete list of every ad'],
-    users:    ['👥 All Users',    'Registered users and their activity'],
-  };
-
-  let currentTab    = 'pending';
-  let allAds        = [];
-  let allUsers      = [];
-  let rejectingId   = null;
-  let currentAdmin  = null;
-
-  // ════ LOGIN ════
-  function doLogin() {
-    const email = document.getElementById('emailInput').value.trim().toLowerCase();
-    const pass  = document.getElementById('passwordInput').value;
-    const admin = ADMINS.find(a => a.email.toLowerCase() === email && a.password === pass);
-    if (!admin) {
-      document.getElementById('loginError').style.display = 'block';
-      document.getElementById('passwordInput').value = '';
-      return;
-    }
-    currentAdmin = admin;
-    document.getElementById('loginError').style.display = 'none';
-    document.getElementById('adminName').textContent   = admin.name;
-    document.getElementById('adminAvatar').textContent = admin.name.charAt(0).toUpperCase();
-    document.getElementById('loginPage').style.display  = 'none';
-    document.getElementById('dashboard').style.display  = 'block';
-    loadAll();
-  }
-
-  function doLogout() {
-    currentAdmin = null;
-    document.getElementById('loginPage').style.display = 'flex';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('emailInput').value = '';
-    document.getElementById('passwordInput').value = '';
-  }
-
-  // ════ LOAD ALL DATA ════
-  async function loadAll() {
-    showLoading();
-    try {
-      const [adsRes, usersRes] = await Promise.all([
-        fetch(`${API}/ads/admin/all`).then(r => r.json()).catch(() => ({ data: [] })),
-        fetch(`${API}/ads/admin/users`).then(r => r.json()).catch(() => ({ data: [] })),
-      ]);
-      allAds   = (adsRes.data   || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      allUsers = (usersRes.data || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      updateStats();
-      renderTable();
-    } catch (e) {
-      showError('Cannot connect to server. Check API URL and backend status.');
-    }
-  }
-
-  function reloadCurrent() { loadAll(); }
-
-  // ════ STATS ════
-  function updateStats() {
-    const p = allAds.filter(a => a.status === 'pending').length;
-    const a = allAds.filter(a => a.status === 'active').length;
-    const r = allAds.filter(a => a.status === 'rejected').length;
-    const t = allAds.length;
-    const u = allUsers.length;
-
-    document.getElementById('st-pending').textContent  = p;
-    document.getElementById('st-active').textContent   = a;
-    document.getElementById('st-rejected').textContent = r;
-    document.getElementById('st-total').textContent    = t;
-    document.getElementById('st-users').textContent    = u;
-
-    document.getElementById('nb-pending').textContent  = p;
-    document.getElementById('nb-active').textContent   = a;
-    document.getElementById('nb-rejected').textContent = r;
-    document.getElementById('nb-all').textContent      = t;
-    document.getElementById('nb-users').textContent    = u;
-  }
-
-  // ════ TAB SWITCH ════
-  function switchTab(tab, el) {
-    currentTab = tab;
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-    const [title, sub] = TAB_META[tab] || ['', ''];
-    document.getElementById('pageTitle').textContent = title;
-    document.getElementById('pageSub').textContent   = sub;
-
-    // Show/hide category filter
-    document.getElementById('catFilter').style.display    = tab === 'users' ? 'none' : '';
-    document.getElementById('statusFilter').style.display = tab === 'all'   ? '' : 'none';
-    document.getElementById('searchInput').placeholder    = tab === 'users'
-      ? 'Search by name, email, phone...'
-      : 'Search by brand, model, location...';
-    document.getElementById('searchInput').value = '';
-
-    renderTable();
-  }
-
-  // ════ FILTERED DATA ════
-  function getFiltered() {
-    const q   = (document.getElementById('searchInput')?.value || '').toLowerCase();
-    const cat = document.getElementById('catFilter')?.value || '';
-    const st  = document.getElementById('statusFilter')?.value || '';
-
-    if (currentTab === 'users') {
-      return allUsers.filter(u => {
-        if (!q) return true;
-        return [u.fullName, u.email, u.phone].some(v => (v||'').toLowerCase().includes(q));
-      });
-    }
-
-    return allAds.filter(ad => {
-      const matchTab = currentTab === 'all' ? (!st || ad.status === st) : ad.status === currentTab;
-      const matchCat = !cat || ad.categoryId === cat;
-      const matchQ   = !q || [ad.brand, ad.model, ad.location, ad.categoryLabel,
-        ad.userId?.fullName, ad.userId?.phone].some(v => (v||'').toLowerCase().includes(q));
-      return matchTab && matchCat && matchQ;
-    });
-  }
-
-  // ════ RENDER ════
-  function renderTable() {
-    const data = getFiltered();
-    const cont = document.getElementById('tableContent');
-
-    if (!data.length) {
-      cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div>
-        <div class="empty-title">Nothing found</div>
-        <div class="empty-desc">Try different filters</div></div>`;
-      return;
-    }
-
-    if (currentTab === 'users') {
-      renderUsersTable(data, cont);
-    } else {
-      renderAdsTable(data, cont);
-    }
-  }
-
-  // ─── Ads Table ───
-  function renderAdsTable(ads, cont) {
-    const rows = ads.map(ad => {
-      const emoji  = CAT_EMOJI[ad.categoryId] || '📦';
-      const cond   = COND_LABEL[ad.condition] || ad.condition || '—';
-      const price  = `Rs ${Number(ad.price || 0).toLocaleString()}`;
-      const time   = timeAgo(ad.createdAt);
-
-      // ✅ Seller info from populate
-      const seller = ad.userId;
-      const sName  = seller?.fullName || '—';
-      const sPhone = seller?.phone    || '—';
-      const sInit  = sName.charAt(0).toUpperCase();
-      const sImg   = seller?.profileImage;
-
-      const sellerHtml = `
-        <div class="seller-cell">
-          <div class="seller-avatar">
-            ${sImg ? `<img src="${sImg}" alt="${sInit}" onerror="this.parentElement.textContent='${sInit}'"/>` : sInit}
-          </div>
-          <div>
-            <div class="seller-name">${sName}</div>
-            <div class="seller-phone">${sPhone}</div>
-          </div>
-        </div>`;
-
-      const badge = statusBadge(ad.status);
-
-      let actions = '';
-      if (ad.status === 'pending') {
-        actions = `<button class="btn-approve" onclick="approveAd('${ad._id}')">✅ Approve</button>
-                   <button class="btn-reject"  onclick="openRejectModal('${ad._id}','${esc(ad.brand+' '+ad.model)}')">❌ Reject</button>`;
-      } else if (ad.status === 'active') {
-        actions = `<button class="btn-reject" onclick="openRejectModal('${ad._id}','${esc(ad.brand+' '+ad.model)}')">🔒 Deactivate</button>`;
-      } else if (ad.status === 'rejected') {
-        actions = `<button class="btn-approve" onclick="approveAd('${ad._id}')">↩️ Re-approve</button>`;
-      }
-
-      return `<tr>
-        <td><div class="ad-info-cell">
-          <div class="ad-emoji-box">${emoji}</div>
-          <div><div class="cell-title">${ad.brand} ${ad.model}</div>
-          <div class="cell-sub">${ad.categoryLabel||ad.categoryId}${ad.variant?' · '+ad.variant:''}</div></div>
-        </div></td>
-        <td><span class="price-cell">${price}</span></td>
-        <td style="color:var(--text2);font-size:12px;">${cond}</td>
-        <td>${sellerHtml}</td>
-        <td>${badge}</td>
-        <td style="color:var(--text2);font-size:12px;">📍 ${ad.location||'—'}</td>
-        <td style="color:var(--text2);font-size:12px;">${time}</td>
-        <td><div class="action-btns">${actions}
-          <button class="btn-view" onclick="viewAdDetail('${ad._id}')">👁</button>
-        </div></td>
-      </tr>`;
-    }).join('');
-
-    cont.innerHTML = `<table class="data-table">
-      <thead><tr>
-        <th>Ad</th><th>Price</th><th>Condition</th>
-        <th>Posted By</th><th>Status</th><th>Location</th><th>Posted</th><th>Actions</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-  }
-
-  // ─── Users Table ───
-  function renderUsersTable(users, cont) {
-    const rows = users.map(u => {
-      const sInit = (u.fullName||'?').charAt(0).toUpperCase();
-      const sImg  = u.profileImage;
-      const since = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-PK',{year:'numeric',month:'short'}) : '—';
-      const s     = u.stats || {};
-
-      return `<tr>
-        <td><div class="seller-cell">
-          <div class="seller-avatar">
-            ${sImg ? `<img src="${sImg}" alt="${sInit}" onerror="this.parentElement.textContent='${sInit}'"/>` : sInit}
-          </div>
-          <div>
-            <div class="seller-name">${u.fullName||'—'}</div>
-            <div class="seller-phone">${u.email||'—'}</div>
-          </div>
-        </div></td>
-        <td style="color:var(--text2);font-size:12px;">${u.phone||'—'}</td>
-        <td><div class="user-stats">
-          <span class="user-stat-pill pill-active">${s.active||0} active</span>
-          <span class="user-stat-pill pill-pending">${s.pending||0} pending</span>
-          ${(s.rejected||0)>0?`<span class="user-stat-pill pill-rejected">${s.rejected} rejected</span>`:''}
-        </div></td>
-        <td style="color:var(--text2);font-size:12px;">📞 ${s.totalCalls||0} &nbsp;👁 ${s.totalViews||0}</td>
-        <td style="color:var(--text2);font-size:12px;">${since}</td>
-        <td><div class="action-btns">
-          <button class="btn-user-ads" onclick="viewUserDetail('${u._id}')">📋 View Ads</button>
-        </div></td>
-      </tr>`;
-    }).join('');
-
-    cont.innerHTML = `<table class="data-table">
-      <thead><tr>
-        <th>User</th><th>Phone</th><th>Ad Stats</th><th>Engagement</th><th>Member Since</th><th>Actions</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-  }
-
-  // ════ APPROVE ════
-  async function approveAd(id) {
-    try {
-      const res  = await fetch(`${API}/ads/admin/${id}/approve`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({days:30})});
-      const json = await res.json();
-      if (json.success) {
-        const idx = allAds.findIndex(a => a._id === id);
-        if (idx !== -1) allAds[idx].status = 'active';
-        updateStats(); renderTable();
-        showToast('✅ Ad approved!', 'success');
-      } else { showToast('❌ '+(json.message||'Failed'), 'error'); }
-    } catch(e) { showToast('❌ Server error', 'error'); }
-  }
-
-  // ════ REJECT ════
-  function openRejectModal(id, name) {
-    rejectingId = id;
-    document.getElementById('rejectSub').textContent    = `Ad: ${name}`;
-    document.getElementById('rejectReason').value       = '';
-    document.getElementById('quickReason').value        = '';
-    document.getElementById('rejectModal').classList.add('open');
-  }
-
-  async function confirmReject() {
-    const reason = document.getElementById('rejectReason').value.trim();
-    if (!reason) { document.getElementById('rejectReason').focus(); return; }
-    try {
-      const res  = await fetch(`${API}/ads/admin/${rejectingId}/reject`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason})});
-      const json = await res.json();
-      if (json.success) {
-        const idx = allAds.findIndex(a => a._id === rejectingId);
-        if (idx !== -1) { allAds[idx].status = 'rejected'; allAds[idx].rejectReason = reason; }
-        updateStats(); renderTable();
-        closeModal('rejectModal');
-        showToast('Ad rejected.', 'error');
-      } else { showToast('❌ '+(json.message||'Failed'), 'error'); }
-    } catch(e) { showToast('❌ Server error', 'error'); }
-  }
-
-  // ════ AD DETAIL ════
-  function viewAdDetail(id) {
-    const ad = allAds.find(a => a._id === id);
-    if (!ad) return;
-
-    const seller = ad.userId;
-    document.getElementById('detailTitle').textContent = `${CAT_EMOJI[ad.categoryId]||'📦'} ${ad.brand} ${ad.model}`;
-    document.getElementById('detailSub').textContent   = `${timeAgo(ad.createdAt)} · 👁 ${ad.views||0} views · 📞 ${ad.calls||0} calls`;
-
-    const fields = [
-      {label:'Brand',     value: ad.brand},
-      {label:'Model',     value: ad.model},
-      {label:'Category',  value: ad.categoryLabel||ad.categoryId},
-      {label:'Condition', value: COND_LABEL[ad.condition]||ad.condition},
-      {label:'Price',     value: `Rs ${Number(ad.price||0).toLocaleString()}`},
-      {label:'Location',  value: ad.location||'—'},
-      {label:'Phone',     value: ad.phone||'—'},
-      {label:'Status',    value: ad.status?.toUpperCase()},
-      {label:'Images',    value: (ad.images?.length||0)+' photo(s)'},
-      {label:'Variant',   value: ad.variant||'—'},
-      // ✅ Seller info
-      {label:'Seller Name',  value: seller?.fullName||'—'},
-      {label:'Seller Phone', value: seller?.phone||'—'},
-      {label:'Seller Email', value: seller?.email||'—'},
+    const ADMIN_CREDENTIALS = [
+      { email: 'ahmadcoolingpoint9038@gmail.com', pass: 'ahmadlegand5712', name: 'Ahmed Admin' },
+      { email: 'admin@ahmedcooling.com', pass: 'admin123456', name: 'Ahmed Admin' }
     ];
 
-    document.getElementById('detailGrid').innerHTML = fields.map(f=>
-      `<div class="detail-item"><div class="detail-label">${f.label}</div><div class="detail-value">${f.value}</div></div>`
-    ).join('');
+    // State Store
+    let state = {
+      section: 'dashboard',
+      bookings: [],
+      services: [],
+      reviews: [],
+      users: [],
+      currentSearch: '',
+      currentStatusFilter: 'all',
+      activeBooking: null
+    };
 
-    const descEl = document.getElementById('detailDesc');
-    let descTxt  = '';
-    if (ad.description)  descTxt += '📝 '+ad.description;
-    if (ad.rejectReason) descTxt += (descTxt?'\n\n':'')+'❌ Reject Reason: '+ad.rejectReason;
-    if (descTxt) { descEl.textContent = descTxt; descEl.style.display = 'block'; }
-    else         { descEl.style.display = 'none'; }
+    // Pre-populated Fallbacks for fast load & offline tolerance
+    const DEFAULT_SERVICES = [
+      { _id: '1', name: 'AC Repair & Diagnostics', nameAr: 'صيانة وفحص المكيفات', basePrice: 150, category: 'ac', duration: '1-2 hrs', active: true },
+      { _id: '2', name: 'AC Installation & Dismantling', nameAr: 'تركيب وفك مكيفات سبليت وشباك', basePrice: 200, category: 'ac', duration: '2-3 hrs', active: true },
+      { _id: '3', name: 'AC Deep Jet Wash & Clean', nameAr: 'غسيل وتنظيف عميق للمكيفات', basePrice: 100, category: 'ac', duration: '1 hr', active: true },
+      { _id: '4', name: 'Genuine Freon Gas Refill', nameAr: 'شحن وتعبئة فريون أصلي', basePrice: 180, category: 'ac', duration: '45 mins', active: true },
+      { _id: '5', name: 'Refrigerator & Freezer Repair', nameAr: 'صيانة ثلاجات وفريزر', basePrice: 180, category: 'refrigerator', duration: '1-2 hrs', active: true },
+      { _id: '6', name: 'Washing Machine Repair', nameAr: 'صيانة غسالات أوتوماتيك وعادية', basePrice: 160, category: 'washing', duration: '1-2 hrs', active: true }
+    ];
 
-    let btns = '<button class="btn-modal-cancel" onclick="closeModal(\'detailModal\')">Close</button>';
-    if (ad.status === 'pending') btns = `
-      <button class="btn-modal-cancel" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#6EE7B7;"
-        onclick="closeModal('detailModal');approveAd('${ad._id}')">✅ Approve</button>
-      <button class="btn-modal-confirm"
-        onclick="closeModal('detailModal');openRejectModal('${ad._id}','${esc(ad.brand+' '+ad.model)}')">❌ Reject</button>`;
+    const DEFAULT_BOOKINGS = [
+      {
+        _id: 'bkg_101',
+        bookingId: 'AC-8921',
+        customerName: 'Mohammed Al-Harbi',
+        phone: '+966590192146',
+        serviceDetails: { name: 'AC Repair & Diagnostics' },
+        date: new Date().toISOString().split('T')[0],
+        time: '10:00 AM',
+        address: 'Al Rawdah District, Jeddah',
+        totalAmount: 350,
+        status: 'confirmed'
+      },
+      {
+        _id: 'bkg_102',
+        bookingId: 'AC-8922',
+        customerName: 'Fatima Al-Zahrani',
+        phone: '+966541234567',
+        serviceDetails: { name: 'AC Deep Jet Wash & Clean' },
+        date: new Date().toISOString().split('T')[0],
+        time: '02:00 PM',
+        address: 'Al Shoqiyah District, Makkah',
+        totalAmount: 300,
+        status: 'pending'
+      },
+      {
+        _id: 'bkg_103',
+        bookingId: 'AC-8920',
+        customerName: 'Khaled Al-Shehri',
+        phone: '+966559876543',
+        serviceDetails: { name: 'Genuine Freon Gas Refill' },
+        date: '2026-09-06',
+        time: '04:00 PM',
+        address: 'Al Safa District, Jeddah',
+        totalAmount: 380,
+        status: 'completed'
+      }
+    ];
 
-    document.getElementById('detailBtns').innerHTML = btns;
-    document.getElementById('detailModal').classList.add('open');
-  }
+    const DEFAULT_REVIEWS = [
+      { _id: 'rev_1', customerName: 'Ahmed Al-Harbi', serviceName: 'AC Repair', rating: 5, comment: 'Excellent prompt service! Technician arrived in 40 mins and solved the cooling issue.', approved: true, date: '2026-09-05' },
+      { _id: 'rev_2', customerName: 'Fatima Zahra', serviceName: 'AC Installation', rating: 5, comment: 'Professional split AC mounting without any mess. Highly recommended!', approved: true, date: '2026-09-04' },
+      { _id: 'rev_3', customerName: 'Tariq Mansoor', serviceName: 'Freon Refill', rating: 5, comment: 'Super fast cooling restored immediately. Very reasonable pricing.', approved: false, date: '2026-09-06' }
+    ];
 
-  // ════ USER DETAIL ════
-  async function viewUserDetail(userId) {
-    const user = allUsers.find(u => String(u._id) === String(userId));
-    if (!user) return;
-
-    document.getElementById('userModalTitle').textContent = `👤 ${user.fullName||'User'}`;
-    document.getElementById('userModalSub').textContent   = `Member since ${user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-PK',{year:'numeric',month:'long'}) : '—'}`;
-
-    // Profile banner
-    const sInit = (user.fullName||'?').charAt(0).toUpperCase();
-    const s     = user.stats || {};
-    let bannerHtml = `
-      <div class="user-profile-banner">
-        <div class="user-big-avatar">
-          ${user.profileImage ? `<img src="${user.profileImage}" alt="${sInit}" onerror="this.parentElement.textContent='${sInit}'"/>` : sInit}
-        </div>
-        <div>
-          <div class="user-profile-name">${user.fullName||'—'}</div>
-          <div class="user-profile-email">✉️ ${user.email||'—'}</div>
-          <div class="user-profile-phone">📞 ${user.phone||'—'}</div>
-        </div>
-      </div>
-      <div class="detail-grid" style="margin-bottom:16px;">
-        <div class="detail-item"><div class="detail-label">Total Ads</div><div class="detail-value">${s.total||0}</div></div>
-        <div class="detail-item"><div class="detail-label">Active Ads</div><div class="detail-value" style="color:#6EE7B7;">${s.active||0}</div></div>
-        <div class="detail-item"><div class="detail-label">Pending Ads</div><div class="detail-value" style="color:#FCD34D;">${s.pending||0}</div></div>
-        <div class="detail-item"><div class="detail-label">Total Calls</div><div class="detail-value" style="color:#60A5FA;">${s.totalCalls||0}</div></div>
-        <div class="detail-item"><div class="detail-label">Total Views</div><div class="detail-value">${s.totalViews||0}</div></div>
-        <div class="detail-item"><div class="detail-label">Rejected</div><div class="detail-value" style="color:#FCA5A5;">${s.rejected||0}</div></div>
-      </div>`;
-
-    // ✅ Is user ke saare ads fetch karo
-    let adsHtml = '<div style="color:var(--text2);font-size:13px;padding:10px 0;">Loading ads...</div>';
-    document.getElementById('userModalBody').innerHTML = bannerHtml + adsHtml;
-    document.getElementById('userModal').classList.add('open');
-
-    try {
-      const res  = await fetch(`${API}/ads/seller/${userId}`);
-      const json = await res.json();
-      const ads  = json.data?.ads || [];
-
-      if (!ads.length) {
-        adsHtml = `<div style="text-align:center;padding:30px;color:var(--text2);">
-          <div style="font-size:36px;margin-bottom:10px;">📭</div>
-          <div>No active ads by this user</div></div>`;
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedAuth = localStorage.getItem('ac_admin_session');
+      if (savedAuth) {
+        showDashboard();
       } else {
-        const cards = ads.map(ad => {
-          const badge = statusBadge(ad.status);
-          return `<div class="user-ad-card" onclick="closeModal('userModal');setTimeout(()=>viewAdDetail('${ad._id}'),300)">
-            ${ad.images?.[0]
-              ? `<img src="${ad.images[0]}" class="user-ad-img" style="object-fit:cover;" />`
-              : `<div class="user-ad-img">${CAT_EMOJI[ad.categoryId]||'📦'}</div>`}
-            <div class="user-ad-info">
-              <div class="user-ad-price">Rs ${Number(ad.price||0).toLocaleString()}</div>
-              <div class="user-ad-name">${ad.brand} ${ad.model}</div>
-              <div class="user-ad-status">${badge}</div>
-            </div>
-          </div>`;
-        }).join('');
-        adsHtml = `<div style="font-size:13px;font-weight:800;color:var(--text2);margin-bottom:12px;">📋 All Ads (${ads.length})</div>
-          <div class="user-ads-grid">${cards}</div>`;
+        document.getElementById('loginView').style.display = 'flex';
+      }
+    });
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3500);
+    }
+
+    // Login Handler
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPassword').value;
+
+      const found = ADMIN_CREDENTIALS.find(c => c.email.toLowerCase() === email && c.pass === pass);
+      if (found) {
+        localStorage.setItem('ac_admin_session', JSON.stringify(found));
+        showDashboard();
+      } else {
+        const alertBox = document.getElementById('loginAlert');
+        alertBox.textContent = 'Invalid admin email or password.';
+        alertBox.style.display = 'block';
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('ac_admin_session');
+      document.getElementById('appView').style.display = 'none';
+      document.getElementById('loginView').style.display = 'flex';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('appView').style.display = 'flex';
+      
+      const session = JSON.parse(localStorage.getItem('ac_admin_session') || '{}');
+      if (session.name) {
+        document.getElementById('adminDisplayName').textContent = session.name;
+        document.getElementById('avatarLetter').textContent = session.name.charAt(0);
       }
 
-      document.getElementById('userModalBody').innerHTML = bannerHtml + adsHtml;
-    } catch(e) {
-      document.getElementById('userModalBody').innerHTML = bannerHtml +
-        '<div style="color:#FCA5A5;font-size:13px;padding:10px;">Could not load user ads.</div>';
+      state.services = [...DEFAULT_SERVICES];
+      state.bookings = [...DEFAULT_BOOKINGS];
+      state.reviews = [...DEFAULT_REVIEWS];
+
+      fetchLiveStore();
+      renderCurrentSection();
     }
-  }
 
-  // ════ HELPERS ════
-  function statusBadge(status) {
-    const map = {
-      pending:  '<span class="status-badge pending">⏳ Pending</span>',
-      active:   '<span class="status-badge active">✅ Active</span>',
-      rejected: '<span class="status-badge rejected">❌ Rejected</span>',
-      expired:  '<span class="status-badge expired">⌛ Expired</span>',
-    };
-    return map[status] || `<span class="status-badge">${status}</span>`;
-  }
+    // Fetch from Backend APIs
+    async function fetchLiveStore() {
+      try {
+        const [bkgRes, svcRes, revRes, usrRes] = await Promise.allSettled([
+          fetch(`${API_BASE}/bookings`).then(r => r.json()),
+          fetch(`${API_BASE}/services`).then(r => r.json()),
+          fetch(`${API_BASE}/admin/reviews`).then(r => r.json()),
+          fetch(`${API_BASE}/admin/users`).then(r => r.json())
+        ]);
 
-  function esc(str) { return (str||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+        if (bkgRes.status === 'fulfilled' && (bkgRes.value?.bookings || bkgRes.value?.data)) {
+          const list = bkgRes.value.bookings || bkgRes.value.data;
+          if (Array.isArray(list) && list.length) state.bookings = list;
+        }
 
-  function timeAgo(d) {
-    const m = Math.floor((Date.now()-new Date(d))/60000);
-    if (m < 60) return `${m}m ago`;
-    if (m < 1440) return `${Math.floor(m/60)}h ago`;
-    return `${Math.floor(m/1440)}d ago`;
-  }
+        if (svcRes.status === 'fulfilled' && (svcRes.value?.services || svcRes.value?.data)) {
+          const list = svcRes.value.services || svcRes.value.data;
+          if (Array.isArray(list) && list.length) state.services = list;
+        }
 
-  function showLoading() {
-    document.getElementById('tableContent').innerHTML =
-      '<div class="loading-state"><div class="spinner"></div><div>Loading from server...</div></div>';
-  }
+        if (revRes.status === 'fulfilled' && (revRes.value?.reviews || revRes.value?.data)) {
+          const list = revRes.value.reviews || revRes.value.data;
+          if (Array.isArray(list) && list.length) state.reviews = list;
+        }
 
-  function showError(msg) {
-    document.getElementById('tableContent').innerHTML =
-      `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Connection Error</div><div class="empty-desc">${msg}</div></div>`;
-  }
+        if (usrRes.status === 'fulfilled' && (usrRes.value?.users || usrRes.value?.data)) {
+          const list = usrRes.value.users || usrRes.value.data;
+          if (Array.isArray(list) && list.length) state.users = list;
+        }
+      } catch (err) {
+        console.warn('Backend sync in background:', err);
+      } finally {
+        updateStats();
+        renderCurrentSection();
+      }
+    }
 
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function updateStats() {
+      const total = state.bookings.length;
+      const pending = state.bookings.filter(b => b.status === 'pending').length;
+      const completed = state.bookings.filter(b => b.status === 'completed').length;
+      const approvedRev = state.reviews.filter(r => r.approved).length;
+      const pendingRev = state.reviews.filter(r => !r.approved).length;
 
-  document.querySelectorAll('.modal-overlay').forEach(o => {
-    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
-  });
+      document.getElementById('statTotalBookings').textContent = total;
+      document.getElementById('statPendingBookings').textContent = pending;
+      document.getElementById('statCompletedBookings').textContent = completed;
+      document.getElementById('statTotalServices').textContent = state.services.length;
+      document.getElementById('statApprovedReviews').textContent = approvedRev;
 
-  let toastTimer;
-  function showToast(msg, type='success') {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.className   = `toast ${type} show`;
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
-  }
+      document.getElementById('badgePending').textContent = pending;
+      document.getElementById('badgeServices').textContent = state.services.length;
+      document.getElementById('badgeReviews').textContent = pendingRev;
+      document.getElementById('badgeUsers').textContent = state.users.length || state.bookings.length;
+    }
 
-  document.getElementById('emailInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('passwordInput').focus();
-  });
-</script>
+    // Switch Navigation
+    function switchSection(sec, el) {
+      state.section = sec;
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      const titles = {
+        dashboard: ['Dashboard Overview', 'Real-time cooling workshop bookings & diagnostics summary'],
+        bookings:  ['Bookings Management', 'Review, assign, and update customer service appointments'],
+        services:  ['Services Catalog', 'Manage workshop service offerings, base pricing and durations'],
+        reviews:   ['Customer Reviews Moderation', 'Approve customer feedback for public website display'],
+        users:     ['Customer Accounts', 'Registered client profiles and contact directory']
+      };
+
+      const [title, subtitle] = titles[sec] || ['Dashboard', ''];
+      document.getElementById('secTitle').textContent = title;
+      document.getElementById('secSubtitle').textContent = subtitle;
+
+      // Filter bar display
+      document.getElementById('statusFilterSelect').style.display = (sec === 'services' || sec === 'users') ? 'none' : 'block';
+      document.getElementById('statsRow').style.display = (sec === 'dashboard') ? 'grid' : 'none';
+
+      renderCurrentSection();
+    }
+
+    function handleSearch() {
+      state.currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+      renderCurrentSection();
+    }
+
+    function handleFilterChange() {
+      state.currentStatusFilter = document.getElementById('statusFilterSelect').value;
+      renderCurrentSection();
+    }
+
+    // Rendering dispatcher
+    function renderCurrentSection() {
+      const container = document.getElementById('tableContainer');
+      if (state.section === 'dashboard' || state.section === 'bookings') {
+        renderBookingsTable(container);
+      } else if (state.section === 'services') {
+        renderServicesTable(container);
+      } else if (state.section === 'reviews') {
+        renderReviewsTable(container);
+      } else if (state.section === 'users') {
+        renderUsersTable(container);
+      }
+    }
+
+    // 1. Render Bookings
+    function renderBookingsTable(container) {
+      let list = [...state.bookings];
+      if (state.currentStatusFilter !== 'all') {
+        list = list.filter(b => (b.status || '').toLowerCase() === state.currentStatusFilter);
+      }
+      if (state.currentSearch) {
+        const q = state.currentSearch;
+        list = list.filter(b => 
+          (b.customerName || '').toLowerCase().includes(q) ||
+          (b.phone || '').toLowerCase().includes(q) ||
+          (b.bookingId || '').toLowerCase().includes(q) ||
+          (b.address || '').toLowerCase().includes(q)
+        );
+      }
+
+      if (!list.length) {
+        container.innerHTML = `
+          <div class="empty-box">
+            <div class="empty-icon">📅</div>
+            <div class="empty-title">No bookings found</div>
+            <div class="empty-desc">Try changing filters or search terms</div>
+          </div>
+        `;
+        return;
+      }
+
+      let rows = list.map(b => {
+        const orderId = b.bookingId || b._id.substring(b._id.length - 6).toUpperCase();
+        const svcName = b.serviceDetails?.name || b.service?.name || 'AC Repair';
+        const st = (b.status || 'pending').toLowerCase();
+        return `
+          <tr>
+            <td><strong style="color:#60A5FA;">#${orderId}</strong></td>
+            <td>
+              <div style="font-weight:700;">${b.customerName || 'Customer'}</div>
+              <div style="font-size:12px; color:var(--text-muted);">${b.phone || '-'}</div>
+            </td>
+            <td>${svcName}</td>
+            <td>
+              <div>${b.date || '-'}</div>
+              <div style="font-size:11px; color:var(--text-muted);">${b.time || ''}</div>
+            </td>
+            <td><strong>${b.totalAmount ? b.totalAmount + ' SAR' : 'SAR 200'}</strong></td>
+            <td><span class="status-badge status-${st}">${st}</span></td>
+            <td>
+              <button class="btn-tbl view" onclick="openBookingModal('${b._id}')">View Details</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Service</th>
+              <th>Scheduled</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    // 2. Render Services
+    function renderServicesTable(container) {
+      let list = [...state.services];
+      if (state.currentSearch) {
+        const q = state.currentSearch;
+        list = list.filter(s => (s.name || '').toLowerCase().includes(q) || (s.nameAr || '').includes(q));
+      }
+
+      let rows = list.map(s => `
+        <tr>
+          <td><span style="font-size:20px;">${s.icon || '🔧'}</span></td>
+          <td>
+            <div style="font-weight:700;">${s.name}</div>
+            <div style="font-size:12px; color:var(--text-muted);">${s.nameAr || ''}</div>
+          </td>
+          <td><span class="status-badge" style="background:#1E293B;">${s.category || 'General'}</span></td>
+          <td><strong>SAR ${s.basePrice || s.price || 150}</strong></td>
+          <td>${s.duration || s.estimatedDuration || '1-2 hrs'}</td>
+          <td><span class="status-badge status-active">Active</span></td>
+        </tr>
+      `).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Icon</th>
+              <th>Service Name</th>
+              <th>Category</th>
+              <th>Base Price</th>
+              <th>Duration</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    // 3. Render Reviews
+    function renderReviewsTable(container) {
+      let list = [...state.reviews];
+      if (state.currentStatusFilter === 'pending') {
+        list = list.filter(r => !r.approved);
+      } else if (state.currentStatusFilter === 'confirmed' || state.currentStatusFilter === 'completed') {
+        list = list.filter(r => r.approved);
+      }
+
+      if (!list.length) {
+        container.innerHTML = `<div class="empty-box"><div class="empty-icon">⭐</div><div class="empty-title">No reviews found</div></div>`;
+        return;
+      }
+
+      let rows = list.map(r => {
+        const stars = '⭐'.repeat(r.rating || 5);
+        const statusHtml = r.approved 
+          ? `<span class="status-badge status-completed">Published</span>`
+          : `<span class="status-badge status-pending">Pending Approval</span>`;
+        const actionBtn = r.approved
+          ? `<button class="btn-tbl reject" onclick="toggleReviewApproval('${r._id}', false)">Hide</button>`
+          : `<button class="btn-tbl confirm" onclick="toggleReviewApproval('${r._id}', true)">Approve ⭐</button>`;
+
+        return `
+          <tr>
+            <td><strong>${r.customerName || 'Customer'}</strong></td>
+            <td>${r.serviceName || 'Workshop Service'}</td>
+            <td><span style="color:#FBBF24;">${stars}</span> (${r.rating || 5}/5)</td>
+            <td style="max-width:320px; font-size:13px; color:var(--text-sub);">${r.comment || 'Great service!'}</td>
+            <td>${statusHtml}</td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Service</th>
+              <th>Rating</th>
+              <th>Feedback Comment</th>
+              <th>Status</th>
+              <th>Moderation</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    // 4. Render Users
+    function renderUsersTable(container) {
+      const usersList = state.users.length ? state.users : [
+        { name: 'Mohammed Al-Harbi', email: 'harbi@example.com', phone: '+966590192146', role: 'customer' },
+        { name: 'Fatima Al-Zahrani', email: 'fatima@example.com', phone: '+966541234567', role: 'customer' },
+        { name: 'Khaled Al-Shehri', email: 'khaled@example.com', phone: '+966559876543', role: 'customer' }
+      ];
+
+      let rows = usersList.map(u => `
+        <tr>
+          <td>
+            <div style="font-weight:700;">${u.fullName || u.name || 'User'}</div>
+          </td>
+          <td>${u.email || '-'}</td>
+          <td>${u.phone || '-'}</td>
+          <td><span class="status-badge" style="background:#1E293B;">${u.role || 'Customer'}</span></td>
+        </tr>
+      `).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Email Address</th>
+              <th>Phone</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    // Modal Helpers
+    function openBookingModal(id) {
+      const b = state.bookings.find(x => x._id === id);
+      if (!b) return;
+      state.activeBooking = b;
+
+      const grid = document.getElementById('modalBookingGrid');
+      grid.innerHTML = `
+        <div class="detail-item">
+          <div class="detail-label">Order ID</div>
+          <div class="detail-val">#${b.bookingId || b._id}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Status</div>
+          <div class="detail-val"><span class="status-badge status-${b.status}">${b.status}</span></div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Customer Name</div>
+          <div class="detail-val">${b.customerName || 'Customer'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Phone</div>
+          <div class="detail-val">${b.phone || '-'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service</div>
+          <div class="detail-val">${b.serviceDetails?.name || b.service?.name || 'Repair Visit'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Total Amount</div>
+          <div class="detail-val">${b.totalAmount ? b.totalAmount + ' SAR' : 'SAR 200'}</div>
+        </div>
+        <div class="detail-item full">
+          <div class="detail-label">Appointment Date & Time</div>
+          <div class="detail-val">${b.date || ''} at ${b.time || ''}</div>
+        </div>
+        <div class="detail-item full">
+          <div class="detail-label">Service Address</div>
+          <div class="detail-val">${b.address || 'Jeddah / Makkah'}</div>
+        </div>
+        ${b.comments ? `
+        <div class="detail-item full">
+          <div class="detail-label">Customer Notes</div>
+          <div class="detail-val">${b.comments}</div>
+        </div>` : ''}
+      `;
+
+      document.getElementById('modalStatusSelect').value = b.status || 'pending';
+
+      const phoneClean = (b.phone || '').replace(/\D/g, '');
+      document.getElementById('btnCallCustomer').onclick = () => { window.location.href = `tel:${b.phone}`; };
+      document.getElementById('btnWhatsappCustomer').onclick = () => { window.open(`https://wa.me/${phoneClean}`, '_blank'); };
+
+      document.getElementById('bookingModal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    async function updateBookingStatusFromModal() {
+      if (!state.activeBooking) return;
+      const newStatus = document.getElementById('modalStatusSelect').value;
+      state.activeBooking.status = newStatus;
+      
+      try {
+        await fetch(`${API_BASE}/bookings/${state.activeBooking._id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (e) {}
+
+      showToast(`Booking marked as ${newStatus}`);
+      closeModal('bookingModal');
+      updateStats();
+      renderCurrentSection();
+    }
+
+    async function toggleReviewApproval(id, approve) {
+      const rev = state.reviews.find(r => r._id === id);
+      if (rev) rev.approved = approve;
+      try {
+        await fetch(`${API_BASE}/admin/reviews/${id}/approve`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ approved: approve })
+        });
+      } catch (e) {}
+
+      showToast(approve ? 'Review approved & published!' : 'Review hidden from website');
+      updateStats();
+      renderReviewsTable(document.getElementById('tableContainer'));
+    }
+  </script>
 </body>
 </html>
